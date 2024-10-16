@@ -162,9 +162,10 @@ class StockTransferController extends Controller
         $business_locations = BusinessLocation::forDropdown($business_id);
 
         $statuses = $this->stockTransferStatuses();
+        $transferType = $this->transferType();
 
         return view('stock_transfer.create')
-                ->with(compact('business_locations', 'statuses'));
+                ->with(compact('business_locations', 'statuses','transferType'));
     }
 
     private function stockTransferStatuses()
@@ -173,6 +174,14 @@ class StockTransferController extends Controller
             'pending' => __('lang_v1.pending'),
             'in_transit' => __('lang_v1.in_transit'),
             'completed' => __('restaurant.completed')
+        ];
+    }
+    private function transferType()
+    {
+        return [
+            '0' => __('تحويل داخلي'),
+            '1' => __('تحويل من فرع لفرع'),
+            
         ];
     }
 
