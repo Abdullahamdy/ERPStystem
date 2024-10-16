@@ -152,12 +152,15 @@ class SubsStoresController extends Controller
         }
         if (request()->ajax()) {
             try {
+                $table = Stores::findOrFail($id);
+                $parent =  Stores::find($table->parent_id);
+
                 $input = $request->except(['type_cost_hidden', 'store_type_hidden']);
                 $input['type'] = 0;
+                $input['branch_id'] = $parent->branch_id;
                 $input['type_cost'] = $request->input('type_cost_hidden');
                 $input['store_type'] = $request->input('store_type_hidden');
 
-                $table = Stores::findOrFail($id);
                 $table->update($input);
 
                 $output = [
@@ -226,8 +229,13 @@ class SubsStoresController extends Controller
 
         if (request()->ajax()) {
             try {
+
+                $parent =  Stores::find($request->parent_id);
+                
                 $input = $request->except(['type_cost_hidden', 'store_type_hidden']);
+
                 $input['type'] = 0;
+                $input['branch_id'] = $parent->branch_id;
                 $input['store_number'] = random_int(1000000000, 9999999999);
                 $input['type_cost'] = $request->input('type_cost_hidden');
                 $input['store_type'] = $request->input('store_type_hidden');
