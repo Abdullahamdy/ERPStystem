@@ -344,7 +344,7 @@ class ProductUtil extends Util
      *
      * @return boolean
      */
-    public function updateProductQuantity($location_id, $product_id, $variation_id, $new_quantity, $old_quantity = 0, $number_format = null, $uf_data = true)
+    public function updateProductQuantity($location_id, $product_id, $variation_id, $new_quantity, $old_quantity = 0, $number_format = null, $uf_data = true,$store_id = null)
     {
         if ($uf_data) {
             $qty_difference = $this->num_uf($new_quantity, $number_format) - $this->num_uf($old_quantity, $number_format);
@@ -373,6 +373,7 @@ class ProductUtil extends Util
                 $variation_location_d->variation_id = $variation->id;
                 $variation_location_d->product_id = $product_id;
                 $variation_location_d->location_id = $location_id;
+                $variation_location_d->store_id = $store_id;
                 $variation_location_d->product_variation_id = $variation->product_variation_id;
                 $variation_location_d->qty_available = 0;
             }

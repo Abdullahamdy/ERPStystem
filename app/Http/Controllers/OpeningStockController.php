@@ -121,7 +121,6 @@ class OpeningStockController extends Controller
                         'enable_lot'
                     ));
             }
-
             return view('opening_stock.add')
                     ->with(compact(
                         'product',
@@ -142,6 +141,8 @@ class OpeningStockController extends Controller
      */
     public function save(Request $request)
     {
+        
+      
         if (!auth()->user()->can('product.opening_stock')) {
             abort(403, 'Unauthorized action.');
         }
@@ -211,7 +212,7 @@ class OpeningStockController extends Controller
                                         //Calculate transaction total
                                         $old_qty = $purchase_line->quantity;
 
-                                        $this->productUtil->updateProductQuantity($location_id, $product->id, $vid, $qty_remaining, $old_qty, null, false);
+                                        $this->productUtil->updateProductQuantity($location_id, $product->id, $vid, $qty_remaining, $old_qty, null, false,$product->store_id);
                                     }
                                 } else {
                                     if ($qty_remaining != 0) {
@@ -219,15 +220,17 @@ class OpeningStockController extends Controller
                                         //create newly added purchase lines
                                         $purchase_line = new PurchaseLine();
                                         $purchase_line->product_id = $product->id;
+                                        $purchase_line->store_id = $product->store_id;
                                         $purchase_line->variation_id = $vid;
 
-                                        $this->productUtil->updateProductQuantity($location_id, $product->id, $vid, $qty_remaining, 0, null, false);
+                                        $this->productUtil->updateProductQuantity($location_id, $product->id, $vid, $qty_remaining, 0, null, false,$product->store_id);
                                     }
                                 }
                                 if (!is_null($purchase_line)) {
                                     $purchase_line->item_tax = $item_tax;
                                     $purchase_line->tax_id = $tax_id;
                                     $purchase_line->quantity = $qty_remaining;
+                                    $purchase_line->store_id = $product->store_id;
                                     $purchase_line->pp_without_discount = $purchase_price;
                                     $purchase_line->purchase_price = $purchase_price;
                                     $purchase_line->purchase_price_inc_tax = $purchase_price_inc_tax;

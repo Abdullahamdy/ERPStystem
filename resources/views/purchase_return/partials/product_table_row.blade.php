@@ -16,7 +16,7 @@
     @endif
     <td>
         <input type="hidden" name="products[{{$row_index}}][product_id]" class="form-control product_id" value="{{$product->product_id}}">
-
+       
         <input type="hidden" value="{{$product->variation_id}}" 
             name="products[{{$row_index}}][variation_id]">
 

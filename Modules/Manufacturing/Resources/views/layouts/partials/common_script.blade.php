@@ -47,6 +47,10 @@
 	            { data: 'product_name', name: 'product_name' },
 	            { data: 'quantity', searchable: false },
 	            { data: 'final_total', name: 'final_total' },
+<<<<<<< HEAD
+=======
+	            { data: 'final_total', name: 'final_total' },
+>>>>>>> origin/master
 	            { data: 'action', name: 'action' },
 	        ],
 	        fnDrawCallback: function(oSettings) {

@@ -219,4 +219,8 @@ class Product extends Model
     {
         return $this->hasMany(\App\ProductRack::class);
     }
+
+    public function store(){
+        return $this->belongsTo(Stores::class,'store_id');
+    }
 }

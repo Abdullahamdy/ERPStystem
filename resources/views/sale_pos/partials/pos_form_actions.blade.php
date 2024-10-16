@@ -1,7 +1,7 @@
  
  <style>
      .search-container {
-        display: none;
+        display: flex;
         justify-content: flex-end;
         margin-bottom: 20px;
     }

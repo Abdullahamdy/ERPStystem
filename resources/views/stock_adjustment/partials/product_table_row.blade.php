@@ -54,7 +54,7 @@
 
         <input type="hidden" value="{{$product->variation_id}}" 
             name="products[{{$row_index}}][variation_id]">
-
+          
         <input type="hidden" value="{{$product->enable_stock}}" 
             name="products[{{$row_index}}][enable_stock]">
         

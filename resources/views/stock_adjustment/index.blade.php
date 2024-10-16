@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('title', __('stock_adjustment.stock_adjustments'))
-
 @section('content')
 
 <!-- Content Header (Page header) -->

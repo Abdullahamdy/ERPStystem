@@ -21,16 +21,15 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="form-group" style="    margin-right: 610px;
-    padding-top: 88px;">
+        <div class="form-group">
             <div class="input-group">
-                <div class="input-group-btn" style=" z-index:999999999999999999999999999 !important;">
+                <div class="input-group-btn">
                     <button type="button" class="btn btn-default bg-white btn-flat" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search-plus"></i></button>
                 </div>
-                {!! Form::text('search_product', null, ['class' => 'form-control mousetrap ss', 'id' => 'search_product', 'placeholder' => __('lang_v1.search_product_placeholder'),
+                {!! Form::text('search_product', null, ['class' => 'form-control mousetrap', 'id' => 'search_product', 'placeholder' => __('lang_v1.search_product_placeholder'),
                 'disabled' => is_null($default_location)? true : false,
                 'autofocus' => is_null($default_location)? false : true,
-                ])  !!}
+                ]) !!}
                 <span class="input-group-btn">
                     @if(isset($pos_settings['enable_weighing_scale']) && $pos_settings['enable_weighing_scale'] == 1)
                     <button type="button" class="btn btn-default bg-white btn-flat" id="weighing_scale_btn" data-toggle="modal" data-target="#weighing_scale_modal" title="@lang('lang_v1.weighing_scale')"><i class="fa fa-digital-tachograph text-primary fa-lg"></i></button>
@@ -114,30 +113,28 @@
     {!! Form::hidden('default_price_group', $default_price_group_id, ['id' => 'default_price_group']) !!}
     @endif
 
- @if(in_array('types_of_service', $enabled_modules) && !empty($types_of_service))
-<div class="col-md-4 col-sm-6">
-    <div class="form-group">
-        <div class="input-group">
-            <span class="input-group-addon">
-                <i class="fa fa-external-link-square-alt text-primary service_modal_btn"></i>
-            </span>
-
-            <!-- Replace dropdown with buttons -->
-            <div id="types_of_service_buttons">
-                <button type="button" class="btn btn-primary service-btn" data-value="داخلي">داخلي</button>
-                <button type="button" class="btn btn-secondary service-btn" data-value="تيك اوي">تيك اوي</button>
-                <button type="button" class="btn btn-secondary service-btn" data-value="ديلفري">ديلفري</button>
+   @if(in_array('types_of_service', $enabled_modules) && !empty($types_of_service))
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-external-link-square-alt text-primary service_modal_btn"></i>
+                </span>
+               <select id="types_of_service_id" class="form-control" style="width: 100%;">
+                    <option value="" selected disabled>-- Select Type of Service --</option>
+                    <option value="داخلي">داخلي</option>
+                    <option value="تيك اوي">تيك اوي</option>
+                    <option value="ديلفري">ديلفري</option>
+                </select>
             </div>
+            <small>
+                <p class="help-block hide" id="price_group_text">@lang('lang_v1.price_group'): <span></span></p>
+            </small>
         </div>
-        <small>
-            <p class="help-block hide" id="price_group_text">@lang('lang_v1.price_group'): <span></span></p>
-        </small>
     </div>
-</div>
-
-<!-- Modal remains the same -->
-<div class="modal fade types_of_service_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel"></div>
+    <div class="modal fade types_of_service_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel"></div>
 @endif
+
 
     @if(!empty($pos_settings['show_invoice_scheme']))
     <div class="col-md-4 col-sm-6">
@@ -263,15 +260,6 @@
         box-shadow: none;
         border: 1px solid #ddd;
     }
-.ss{
-       width: 730px !important;
-        /*max-width: 400px;*/
-        padding: 17px 15px !important;
-        border: 1px solid #ddd !important;
-        border-radius: 25px !important;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1) !important;
-        outline: none !important;
-}
     /* Buttons */
     .btn-flat {
         border-radius: 5px;
@@ -352,24 +340,12 @@
             }
         }
 
-        // Add event listeners for each button
-        serviceButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                // Remove 'btn-primary' from all buttons and add 'btn-secondary'
-                serviceButtons.forEach(btn => btn.classList.remove('btn-primary'));
-                serviceButtons.forEach(btn => btn.classList.add('btn-secondary'));
+        // Initial check on page load
+        toggleRestaurantModule();
 
-                // Add 'btn-primary' to the clicked button
-                this.classList.remove('btn-secondary');
-                this.classList.add('btn-primary');
-
-                // Call the function to toggle the restaurant module
-                const selectedValue = this.getAttribute('data-value');
-                toggleRestaurantModule(selectedValue);
-            });
+        // Add event listener for change event on dropdown
+        typesOfServiceDropdown.addEventListener('change', function () {
+            toggleRestaurantModule();
         });
-
-        // Initial check (Optional: to pre-select a button if needed)
-        // toggleRestaurantModule('داخلي'); // For example, you can pass a default value here
     });
 </script>

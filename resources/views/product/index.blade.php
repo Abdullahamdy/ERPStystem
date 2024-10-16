@@ -200,6 +200,7 @@
                         { data: 'image', name: 'products.image'  },
                         { data: 'action', name: 'action'},
                         { data: 'product', name: 'products.name'  },
+                        // { data: 'store_id', name: 'products.store_id'  },
                         { data: 'product_locations', name: 'product_locations'  },
                         @can('view_purchase_price')
                             { data: 'purchase_price', name: 'max_purchase_price', searchable: false},
@@ -210,6 +211,7 @@
                         { data: 'current_stock', searchable: false},
                         { data: 'type', name: 'products.type'},
                         { data: 'category', name: 'c1.name'},
+                        { data: 'store_name', name: 'store_name'},
                         { data: 'brand', name: 'brands.name'},
                         { data: 'tax', name: 'tax_rates.name', searchable: false},
                         { data: 'sku', name: 'products.sku'},

@@ -48,7 +48,6 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/home/sales-payment-dues', 'HomeController@getSalesPaymentDues');
     Route::post('/attach-medias-to-model', 'HomeController@attachMediasToGivenModel')->name('attach.medias.to.model');
     Route::get('/calendar', 'HomeController@getCalendar')->name('calendar');
-    
     Route::post('/test-email', 'BusinessController@testEmailConfiguration');
     Route::post('/test-sms', 'BusinessController@testSmsConfiguration');
     Route::get('/business/settings', 'BusinessController@getBusinessSettings')->name('business.getBusinessSettings');
@@ -58,7 +57,6 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::post('/user/update-password', 'UserController@updatePassword')->name('user.updatePassword');
 
     Route::resource('brands', 'BrandController');
-    
     Route::resource('payment-account', 'PaymentAccountController');
 
     Route::resource('tax-rates', 'TaxRateController');
@@ -66,7 +64,10 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::resource('units', 'UnitController');
 
     Route::resource('ledger-discount', 'LedgerDiscountController', ['only' => [
-        'edit', 'destroy', 'store', 'update'
+        'edit',
+        'destroy',
+        'store',
+        'update'
     ]]);
 
     Route::post('check-mobile', 'ContactController@checkMobile');
@@ -105,7 +106,6 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::post('/products/bulk-update', 'ProductController@bulkUpdate');
     Route::post('/products/bulk-update-location', 'ProductController@updateProductLocation');
     Route::get('/products/get-product-to-edit/{product_id}', 'ProductController@getProductToEdit');
-    
     Route::post('/products/get_sub_categories', 'ProductController@getSubCategories');
     Route::get('/products/get_sub_units', 'ProductController@getSubUnits');
     Route::post('/products/product_form_part', 'ProductController@getProductVariationFormPart');
@@ -118,8 +118,9 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::post('/products/save_quick_product', 'ProductController@saveQuickProduct');
     Route::get('/products/get-combo-product-entry-row', 'ProductController@getComboProductEntryRow');
     Route::post('/products/toggle-woocommerce-sync', 'ProductController@toggleWooCommerceSync');
-    
+
     Route::resource('products', 'ProductController');
+    Route::get('/products/get-stores/{id}', 'ProductController@getStoresBasedOnBranch');
 
     Route::post('/import-purchase-products', 'PurchaseController@importPurchaseProducts');
     Route::post('/purchases/update-status', 'PurchaseController@updateStatus');
@@ -213,7 +214,6 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/reports/get-profit/{by?}', 'ReportController@getProfit');
     Route::get('/reports/items-report', 'ReportController@itemsReport');
     Route::get('/reports/get-stock-value', 'ReportController@getStockValue');
-    
     Route::get('business-location/activate-deactivate/{location_id}', 'BusinessLocationController@activateDeactivateLocation');
 
     //Business Location Settings...
@@ -269,7 +269,6 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('stock-transfers/print/{id}', 'StockTransferController@printInvoice');
     Route::post('stock-transfers/update-status/{id}', 'StockTransferController@updateStatus');
     Route::resource('stock-transfers', 'StockTransferController');
-    
     Route::get('/opening-stock/add/{product_id}', 'OpeningStockController@add');
     Route::post('/opening-stock/save', 'OpeningStockController@save');
 
@@ -286,12 +285,13 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('sell-return/get-product-row', 'SellReturnController@getProductRow');
     Route::get('/sell-return/print/{id}', 'SellReturnController@printInvoice');
     Route::get('/sell-return/add/{id}', 'SellReturnController@add');
-    
     //Backup
     Route::get('backup/download/{file_name}', 'BackUpController@download');
     Route::get('backup/delete/{file_name}', 'BackUpController@delete');
     Route::resource('backup', 'BackUpController', ['only' => [
-        'index', 'create', 'store'
+        'index',
+        'create',
+        'store'
     ]]);
 
     Route::get('selling-price-group/activate-deactivate/{id}', 'SellingPriceGroupController@activateDeactivate');
@@ -335,9 +335,14 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
         Route::post('/link-account', 'AccountReportsController@postLinkAccount');
         Route::get('/cash-flow', 'AccountController@cashFlow');
     });
-    
-    Route::resource('account-types', 'AccountTypeController');
 
+    Route::resource('account-types', 'AccountTypeController');
+    //stores Controller
+    Route::group(['prefix' => 'modules'], function () {
+        Route::resource('subs-stories', 'Store\SubsStoresController');
+        Route::resource('heads-stories', 'Store\HeadsStoresController');
+        Route::get('subs-stories/get-store-details/{id}', 'Store\SubsStoresController@getParentDetails');
+    });
     //Restaurant module
     Route::group(['prefix' => 'modules'], function () {
         Route::resource('tables', 'Restaurant\TableController');
@@ -347,8 +352,8 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
         Route::get('/product-modifiers/{id}/edit', 'Restaurant\ProductModifierSetController@edit');
         Route::post('/product-modifiers/{id}/update', 'Restaurant\ProductModifierSetController@update');
         Route::get('/product-modifiers/product-row/{product_id}', 'Restaurant\ProductModifierSetController@product_row');
-Route::get('/kitchen/orders', [OrderController::class, 'getKitchenOrders'])->name('kitchen.orders');
-Route::get('/kitchen/check-delayed-orders', [OrderController::class, 'checkDelayedOrders'])->name('kitchen.check_delayed_orders');
+        Route::get('/kitchen/orders', [OrderController::class, 'getKitchenOrders'])->name('kitchen.orders');
+        Route::get('/kitchen/check-delayed-orders', [OrderController::class, 'checkDelayedOrders'])->name('kitchen.check_delayed_orders');
 
         Route::get('/add-selected-modifiers', 'Restaurant\ProductModifierSetController@add_selected_modifiers');
 
@@ -366,7 +371,6 @@ Route::get('/kitchen/check-delayed-orders', [OrderController::class, 'checkDelay
 
     Route::get('bookings/get-todays-bookings', 'Restaurant\BookingController@getTodaysBookings');
     Route::resource('bookings', 'Restaurant\BookingController');
-    
     Route::resource('types-of-service', 'TypesOfServiceController');
     Route::get('sells/edit-shipping/{id}', 'SellController@editShipping');
     Route::put('sells/update-shipping/{id}', 'SellController@updateShipping');
@@ -378,7 +382,7 @@ Route::get('/kitchen/check-delayed-orders', [OrderController::class, 'checkDelay
     Route::resource('warranties', 'WarrantyController');
 
     Route::resource('dashboard-configurator', 'DashboardConfiguratorController')
-    ->only(['edit', 'update']);
+        ->only(['edit', 'update']);
 
     Route::get('view-media/{model_id}', 'SellController@viewMedia');
 

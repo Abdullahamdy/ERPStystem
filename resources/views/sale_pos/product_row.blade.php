@@ -192,7 +192,7 @@
 
 		<input type="hidden" value="{{$product->variation_id}}" 
 			name="products[{{$row_count}}][variation_id]" class="row_variation_id">
-
+	
 		<input type="hidden" value="{{$product->enable_stock}}" 
 			name="products[{{$row_count}}][enable_stock]">
 		

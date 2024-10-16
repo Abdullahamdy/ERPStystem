@@ -613,28 +613,15 @@ class SellController extends Controller
      */
     public function create()
     {
+       
         $sale_type = request()->get('sale_type', '');
 
-        if ($sale_type == 'sales_order') {
-            if (!auth()->user()->can('so.create')) {
-                abort(403, 'Unauthorized action.');
-            }
-        } else {
-            if (!auth()->user()->can('direct_sell.access')) {
-                abort(403, 'Unauthorized action.');
-            }
-        }
         
 
         $business_id = request()->session()->get('user.business_id');
 
         //Check if subscribed or not, then check for users quota
-        if (!$this->moduleUtil->isSubscribed($business_id)) {
-            return $this->moduleUtil->expiredResponse();
-        } elseif (!$this->moduleUtil->isQuotaAvailable('invoices', $business_id)) {
-            return $this->moduleUtil->quotaExpiredResponse('invoices', $business_id, action('SellController@index'));
-        }
-
+   
         $walk_in_customer = $this->contactUtil->getWalkInCustomer($business_id);
         
         $business_details = $this->businessUtil->getDetails($business_id);
@@ -657,7 +644,7 @@ class SellController extends Controller
         } elseif ($commsn_agnt_setting == 'cmsn_agnt') {
             $commission_agent = User::saleCommissionAgentsDropdown($business_id);
         }
-
+        
         $types = [];
         if (auth()->user()->can('supplier.create')) {
             $types['supplier'] = __('report.supplier');
@@ -669,27 +656,24 @@ class SellController extends Controller
             $types['both'] = __('lang_v1.both_supplier_customer');
         }
         $customer_groups = CustomerGroup::forDropdown($business_id);
-
+        
         $payment_line = $this->dummyPaymentLine;
         $payment_types = $this->transactionUtil->payment_types(null, true, $business_id);
-
+        
         //Selling Price Group Dropdown
         $price_groups = SellingPriceGroup::forDropdown($business_id);
-
+        
         $default_price_group_id = !empty($default_location->selling_price_group_id) && array_key_exists($default_location->selling_price_group_id, $price_groups) ? $default_location->selling_price_group_id : null;
-
+        
         $default_datetime = $this->businessUtil->format_date('now', true);
-
+        
         $pos_settings = empty($business_details->pos_settings) ? $this->businessUtil->defaultPosSettings() : json_decode($business_details->pos_settings, true);
-
+        
         $invoice_schemes = InvoiceScheme::forDropdown($business_id);
         $default_invoice_schemes = InvoiceScheme::getDefault($business_id);
-        if (!empty($default_location)) {
-            $default_invoice_schemes = InvoiceScheme::where('business_id', $business_id)
-                                        ->findorfail($default_location->invoice_scheme_id);
-        }
+   
         $shipping_statuses = $this->transactionUtil->shipping_statuses();
-
+        
         //Types of service
         $types_of_service = [];
         if ($this->moduleUtil->isModuleEnabled('types_of_service')) {
@@ -726,7 +710,6 @@ class SellController extends Controller
         $users = config('constants.enable_contact_assign') ? User::forDropdown($business_id, false, false, false, true) : [];
 
         $change_return = $this->dummyPaymentLine;
-
         return view('sell.create')
             ->with(compact(
                 'business_details',

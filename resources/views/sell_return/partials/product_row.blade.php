@@ -15,7 +15,7 @@
 
 		<input type="hidden" value="{{$product->enable_stock}}" 
 			name="products[{{$row_count}}][enable_stock]">
-		
+			
 		@if(empty($product->quantity_ordered))
 			@php
 				$product->quantity_ordered = 1;
