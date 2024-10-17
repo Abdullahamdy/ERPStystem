@@ -54,6 +54,7 @@
                                 'placeholder' => __('messages.please_select'),
                                 'required',
                                 'id' => 'transferType',
+                                'name'=>'transfer_type'
                             ]) !!}
                         </div>
                     </div>
@@ -65,8 +66,7 @@
                             {!! Form::select('location_id', $business_locations, null, [
                                 'class' => 'form-control select2',
                                 'placeholder' => __('messages.please_select'),
-                                'required',
-                                'id' => 'location_from',
+                                'id' => 'location_id',
                             ]) !!}
                         </div>
                     </div>
@@ -87,13 +87,8 @@
 
                     <div class="col-sm-6 location_to" style="visibility: hidden;">
                         <div class="form-group">
-                            {!! Form::label('transfer_location_id', __('lang_v1.location_to') . ':*') !!}
-                            {!! Form::select('transfer_location_id', $business_locations, null, [
-                                'class' => 'form-control select2',
-                                'placeholder' => __('messages.please_select'),
-                                'required',
-                                'id' => 'location_from',
-                            ]) !!}
+                            {!! Form::label('transfer_location_id', __('lang_v1.location_to').':*') !!}
+                            {!! Form::select('transfer_location_id', $business_locations, null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'id' => 'transfer_location_id']); !!}
                         </div>
                     </div>
                     <div class="col-sm-6 store_to" style="visibility: hidden;">
@@ -220,109 +215,109 @@
 
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            const $transferType = $('#transferType');
-            const $locationFrom = $('#location_from');
-            const $locationTo = $('select[name="transfer_location_id"]');
-            const $storeFrom = $('select[name="store_from"]');
-            const $storeTo = $('select[name="store_to"]');
-            const $allFields = $('.location_from, .store_from, .location_to, .store_to');
+       $(document).ready(function() {
+    const $transferType = $('#transferType');
+    const $locationFrom = $('#location_id');
+    const $locationTo = $('#transfer_location_id');
+    const $storeFrom = $('select[name="store_from"]');
+    const $storeTo = $('select[name="store_to"]');
+    const $allFields = $('.location_from, .store_from, .location_to, .store_to');
 
-            function toggleFieldsVisibility(transferType) {
-                if (transferType === '') {
-                    $allFields.css('visibility', 'hidden');
-                } else if (transferType === '0') { // Internal transfer
-                    $('.location_from, .store_from, .store_to').css('visibility', 'visible');
-                    $('.location_to').css('visibility', 'hidden');
-                } else if (transferType === '1') { // External transfer
-                    $allFields.css('visibility', 'visible');
-                }
-            }
-
-            function updateStores(branchId, targetSelect) {
-                if (!branchId) {
-                    targetSelect.empty().append($('<option>', {
-                        value: '',
-                        text: targetSelect.data('placeholder') || 'الرجاء الاختيار'
-                    }));
-                    return;
-                }
-
-                $.ajax({
-                    url: `/products/get-stores/${branchId}`,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        targetSelect.empty().append($('<option>', {
-                            value: '',
-                            text: targetSelect.data('placeholder') || 'الرجاء الاختيار'
-                        }));
-                        if (data && typeof data === 'object' && Object.keys(data).length) {
-                            $.each(data, function(key, value) {
-                                if (key && value) {
-                                    targetSelect.append($('<option>', {
-                                        value: key,
-                                        text: value
-                                    }));
-                                }
-                            });
-                        } else {
-                            console.warn('No valid store data received');
-                        }
-                        targetSelect.trigger('change');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching store details:', error);
-                        alert('حدث خطأ أثناء جلب تفاصيل المخزن. يرجى المحاولة مرة أخرى.');
-                    }
-                });
-            }
-
-            function handleTransferTypeChange() {
-                const transferType = $transferType.val();
-                toggleFieldsVisibility(transferType);
-                $storeFrom.empty().append($('<option>', {
-                    value: '',
-                    text: $storeFrom.data('placeholder') || 'الرجاء الاختيار'
-                }));
-                $storeTo.empty().append($('<option>', {
-                    value: '',
-                    text: $storeTo.data('placeholder') || 'الرجاء الاختيار'
-                }));
-                if (transferType === '0') {
-                    updateStores($locationFrom.val(), $storeFrom);
-                    updateStores($locationFrom.val(), $storeTo);
-                }
-            }
-
-            $transferType.on('change', handleTransferTypeChange);
-
-            $locationFrom.on('change', function() {
-                const branchId = $(this).val();
-                const transferType = $transferType.val();
-                if (transferType === '0') {
-                    updateStores(branchId, $storeFrom);
-                    updateStores(branchId, $storeTo);
-                } else if (transferType === '1') {
-                    updateStores(branchId, $storeFrom);
-                }
-            });
-
-            $locationTo.on('change', function() {
-                const branchId = $(this).val();
-                const transferType = $transferType.val();
-                if (transferType === '1') {
-                    updateStores(branchId, $storeTo);
-                }
-            });
-
-            // Initialize select2 for all select elements
-            $('.select2').select2();
-
-            // Initialize fields on page load
+    function toggleFieldsVisibility(transferType) {
+        if (transferType === '') {
             $allFields.css('visibility', 'hidden');
-            // Check initial value of transferType
-            handleTransferTypeChange();
+        } else if (transferType === '0') { // Internal transfer
+            $('.location_from, .store_from, .store_to').css('visibility', 'visible');
+            $('.location_to').css('visibility', 'hidden');
+        } else if (transferType === '1') { // External transfer
+            $allFields.css('visibility', 'visible');
+        }
+    }
+
+    function updateStores(branchId, targetSelect) {
+        if (!branchId) {
+            targetSelect.empty().append($('<option>', {
+                value: '',
+                text: targetSelect.data('placeholder') || 'الرجاء الاختيار'
+            }));
+            return;
+        }
+
+        $.ajax({
+            url: `/products/get-stores/${branchId}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                targetSelect.empty().append($('<option>', {
+                    value: '',
+                    text: targetSelect.data('placeholder') || 'الرجاء الاختيار'
+                }));
+                if (data && typeof data === 'object' && Object.keys(data).length) {
+                    $.each(data, function(key, value) {
+                        if (key && value) {
+                            targetSelect.append($('<option>', {
+                                value: key,
+                                text: value
+                            }));
+                        }
+                    });
+                } else {
+                    console.warn('No valid store data received');
+                }
+                targetSelect.trigger('change');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching store details:', error);
+                alert('حدث خطأ أثناء جلب تفاصيل المخزن. يرجى المحاولة مرة أخرى.');
+            }
         });
+    }
+
+    function handleTransferTypeChange() {
+        const transferType = $transferType.val();
+        toggleFieldsVisibility(transferType);
+        $storeFrom.empty().append($('<option>', {
+            value: '',
+            text: $storeFrom.data('placeholder') || 'الرجاء الاختيار'
+        }));
+        $storeTo.empty().append($('<option>', {
+            value: '',
+            text: $storeTo.data('placeholder') || 'الرجاء الاختيار'
+        }));
+        if (transferType === '0') {
+            updateStores($locationFrom.val(), $storeFrom);
+            updateStores($locationFrom.val(), $storeTo);
+        }
+    }
+
+    $transferType.on('change', handleTransferTypeChange);
+
+    $locationFrom.on('change', function() {
+        const branchId = $(this).val();
+        const transferType = $transferType.val();
+        if (transferType === '0') {
+            updateStores(branchId, $storeFrom);
+            updateStores(branchId, $storeTo);
+        } else if (transferType === '1') {
+            updateStores(branchId, $storeFrom);
+        }
+    });
+
+    $locationTo.on('change', function() {
+        const branchId = $(this).val();
+        const transferType = $transferType.val();
+        if (transferType === '1') {
+            updateStores(branchId, $storeTo);
+        }
+    });
+
+    // Initialize select2 for all select elements
+    $('.select2').select2();
+
+    // Initialize fields on page load
+    $allFields.css('visibility', 'hidden');
+    // Check initial value of transferType
+    handleTransferTypeChange();
+});
     </script>
 @endsection

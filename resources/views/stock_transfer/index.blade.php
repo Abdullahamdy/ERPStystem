@@ -29,6 +29,8 @@
                         <th>@lang('sale.status')</th>
                         <th>@lang('lang_v1.shipping_charges')</th>
                         <th>@lang('stock_adjustment.total_amount')</th>
+                        <th>من مخزن </th>
+                        <th>الي مخزن</th>
                         <th>@lang('purchase.additional_notes')</th>
                         <th>@lang('messages.action')</th>
                     </tr>

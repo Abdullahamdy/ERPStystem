@@ -398,4 +398,11 @@ class Transaction extends Model
         
         return $sales_orders;
     }
+
+    public function storeto(){
+        return $this->belongsTo(Stores::class,'store_from');
+    }
+    public function storefrom(){
+        return $this->belongsTo(Stores::class,'store_to');
+    }
 }

@@ -153,6 +153,8 @@ $(document).ready(function() {
             { data: 'status', name: 'status' },
             { data: 'shipping_charges', name: 'shipping_charges' },
             { data: 'final_total', name: 'final_total' },
+            { data: 'from_store', name: 'from_store' },
+            { data: 'to_store', name: 'to_store' },
             { data: 'additional_notes', name: 'additional_notes' },
             { data: 'action', name: 'action' },
         ],

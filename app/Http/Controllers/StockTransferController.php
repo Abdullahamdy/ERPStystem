@@ -62,7 +62,6 @@ class StockTransferController extends Controller
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
             $edit_days = request()->session()->get('business.transaction_edit_days');
-
             $stock_transfers = Transaction::join(
                 'business_locations AS l1',
                 'transactions.location_id',
@@ -80,6 +79,8 @@ class StockTransferController extends Controller
                     ->where('transactions.type', 'sell_transfer')
                     ->select(
                         'transactions.id',
+                        'transactions.store_to as store_to',
+                        't2.store_from as store_from',
                         'transactions.transaction_date',
                         'transactions.ref_no',
                         'l1.name as location_from',
@@ -90,7 +91,6 @@ class StockTransferController extends Controller
                         'transactions.id as DT_RowId',
                         'transactions.status'
                     );
-            
             return Datatables::of($stock_transfers)
                 ->addColumn('action', function ($row) use ($edit_days) {
                     $html = '<button type="button" title="' . __("stock_adjustment.view_details") . '" class="btn btn-primary btn-xs btn-modal" data-container=".view_modal" data-href="' . action('StockTransferController@show', [$row->id]) . '"><i class="fa fa-eye" aria-hidden="true"></i> ' . __('messages.view') . '</button>';
@@ -121,6 +121,12 @@ class StockTransferController extends Controller
                     'shipping_charges',
                     '<span class="display_currency" data-currency_symbol="true">{{$shipping_charges}}</span>'
                 )
+                ->editColumn('from_store', function ($row) {
+                    return $row->storefrom ? $row->storefrom->name_ar : 'No store';
+                })
+                ->editColumn('to_store', function ($row) {
+                    return $row->storeto ? $row->storeto->name_ar : 'No store';
+                })
                 ->editColumn('status', function($row) use($statuses) {
                     $row->status = $row->status == 'final' ? 'completed' : $row->status;
                     $status =  $statuses[$row->status];
@@ -171,9 +177,9 @@ class StockTransferController extends Controller
     private function stockTransferStatuses()
     {
         return [
-            'pending' => __('lang_v1.pending'),
-            'in_transit' => __('lang_v1.in_transit'),
-            'completed' => __('restaurant.completed')
+            '1' => __('lang_v1.pending'),
+            '2' => __('lang_v1.in_transit'),
+            '3' => __('restaurant.completed')
         ];
     }
     private function transferType()
@@ -193,7 +199,10 @@ class StockTransferController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('purchase.create')) {
+        if ($request->transfer_location_id == null && $request->transfer_type == 0) {
+            $request->merge(['transfer_location_id' => $request->location_id]);
+        }
+       if (!auth()->user()->can('purchase.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -216,6 +225,7 @@ class StockTransferController extends Controller
             $input_data['type'] = 'sell_transfer';
             $input_data['business_id'] = $business_id;
             $input_data['created_by'] = $user_id;
+            $input_data['store_to'] = $request->input('store_from');
             $input_data['transaction_date'] = $this->productUtil->uf_date($input_data['transaction_date'], true);
             $input_data['shipping_charges'] = $this->productUtil->num_uf($input_data['shipping_charges']);
             $input_data['payment_status'] = 'paid';
@@ -294,6 +304,7 @@ class StockTransferController extends Controller
 
             //Create Purchase Transfer at transfer location
             $input_data['type'] = 'purchase_transfer';
+            $input_data['store_from'] = $request->input('store_to');
             $input_data['location_id'] = $request->input('transfer_location_id');
             $input_data['transfer_parent_id'] = $sell_transfer->id;
             $input_data['status'] = $status == 'completed' ? 'received' : $status;
@@ -360,6 +371,7 @@ class StockTransferController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
@@ -882,7 +894,6 @@ class StockTransferController extends Controller
         if (!auth()->user()->can('purchase.update')) {
             abort(403, 'Unauthorized action.');
         }
-
         try {
             $business_id = request()->session()->get('user.business_id');
 
@@ -945,6 +956,7 @@ class StockTransferController extends Controller
                         'msg' => __('lang_v1.updated_succesfully')
                     ];
         } catch (\Exception $e) {
+        dd($ex);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
