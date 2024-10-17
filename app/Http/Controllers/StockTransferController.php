@@ -199,6 +199,7 @@ class StockTransferController extends Controller
      */
     public function store(Request $request)
     {
+     
         if ($request->transfer_location_id == null && $request->transfer_type == 0) {
             $request->merge(['transfer_location_id' => $request->location_id]);
         }
@@ -323,7 +324,7 @@ class StockTransferController extends Controller
 
             //Decrease product stock from sell location
             //And increase product stock at purchase location
-            if ($status == 'completed') {
+            if ($status = 'completed') {
                 foreach ($products as $product) {
                     if ($product['enable_stock']) {
 
@@ -371,7 +372,6 @@ class StockTransferController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
@@ -956,7 +956,6 @@ class StockTransferController extends Controller
                         'msg' => __('lang_v1.updated_succesfully')
                     ];
         } catch (\Exception $e) {
-        dd($ex);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
