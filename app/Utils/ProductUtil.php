@@ -1564,45 +1564,47 @@ class ProductUtil extends Util
                         $join->on('variations.id', '=', 'VLD.variation_id');
 
                         //Include Location
-                        if (!empty($location_id)) {
+                      
                             $join->where(function ($query) use ($location_id) {
                                 $query->where('VLD.location_id', '=', $location_id);
                                 //Check null to show products even if no quantity is available in a location.
                                 //TODO: Maybe add a settings to show product not available at a location or not.
                                 $query->orWhereNull('VLD.location_id');
                             });
-                            ;
+
+                            
+                            
                         }
+                    );
+                    
+                    if (!is_null($not_for_selling)) {
+                        $query->where('products.not_for_selling', $not_for_selling);
                     }
-                );
-
-        if (!is_null($not_for_selling)) {
-            $query->where('products.not_for_selling', $not_for_selling);
-        }
-
-        if (!empty($price_group_id)) {
+                    
+                    if (!empty($price_group_id)) {
             $query->leftjoin(
                 'variation_group_prices AS VGP',
                 function ($join) use ($price_group_id) {
                     $join->on('variations.id', '=', 'VGP.variation_id')
-                        ->where('VGP.price_group_id', '=', $price_group_id);
+                    ->where('VGP.price_group_id', '=', $price_group_id);
                 }
             );
         }
-
+        
         $query->where('products.business_id', $business_id)
-                ->where('products.type', '!=', 'modifier');
-
+        ->where('products.type', '!=', 'modifier');
+        
         if (!empty($product_types)) {
             $query->whereIn('products.type', $product_types);
         }
-
+        
         if (in_array('lot', $search_fields)) {
             $query->leftjoin('purchase_lines as pl', 'variations.id', '=', 'pl.variation_id');
         }
-
+        
         //Include search
         if (!empty($search_term)) {
+            
 
             //Search with like condition
             if($search_type == 'like'){
@@ -1638,9 +1640,9 @@ class ProductUtil extends Util
                     }
                 });
             }
-
             //Search with exact condition
             if($search_type == 'exact'){
+              
                 $query->where(function ($query) use ($search_term, $search_fields) {
 
                     if (in_array('name', $search_fields)) {
@@ -1662,15 +1664,15 @@ class ProductUtil extends Util
             }
         }
 
-
         //Include check for quantity
         if ($check_qty) {
             $query->where('VLD.qty_available', '>', 0);
         }
-
-        if (!empty($location_id)) {
-            $query->ForLocation($location_id);
-        }
+        
+        // if (!empty($location_id)) {
+        //     dd($query->get());
+        //     $query->ForLocation($location_id);
+        // }
 
         $query->select(
                 'products.id as product_id',

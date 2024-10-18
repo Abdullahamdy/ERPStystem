@@ -46,6 +46,7 @@ $(document).ready(function() {
                     string += '-' + item.variation;
                 }
                 string += ' (' + item.sub_sku + ') (Out of stock) </li>';
+                console.log('ttt')
                 return $(string).appendTo(ul);
             } else if (item.enable_stock != 1) {
                 return ul;

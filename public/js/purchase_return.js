@@ -70,12 +70,14 @@ $(document).ready(function() {
                 },
             })
             .autocomplete('instance')._renderItem = function(ul, item) {
+                console.log(item.sub_sku)
             if (item.qty_available <= 0) {
                 var string = '<li class="ui-state-disabled">' + item.name;
                 if (item.type == 'variable') {
                     string += '-' + item.variation;
                 }
                 string += ' (' + item.sub_sku + ') (Out of stock) </li>';
+                console.log('oooo')
                 return $(string).appendTo(ul);
             } else if (item.enable_stock != 1) {
                 return ul;

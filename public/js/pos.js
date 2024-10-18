@@ -236,6 +236,7 @@ $(document).ready(function() {
                 if (item.variation_group_price) {
                     selling_price = item.variation_group_price;
                 }
+           
                 string +=
                     ' (' +
                     item.sub_sku +
@@ -243,6 +244,7 @@ $(document).ready(function() {
                     '<br> Price: ' +
                     selling_price +
                     ' (Out of stock) </li>';
+                    console.log('notne12w')
                 return $(string).appendTo(ul);
             } else {
                 var string = '<div>' + item.name;

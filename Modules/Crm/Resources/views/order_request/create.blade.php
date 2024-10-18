@@ -234,6 +234,7 @@
 	                if (item.variation_group_price) {
 	                    selling_price = item.variation_group_price;
 	                }
+				
 	                string +=
 	                    ' (' +
 	                    item.sub_sku +
@@ -241,6 +242,7 @@
 	                    '<br> Price: ' +
 	                    selling_price +
 	                    ' (Out of stock) </li>';
+						console.log('new')
 	                return $(string).appendTo(ul);
 	            } else {
 	                var string = '<div>' + item.name;

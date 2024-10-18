@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BusinessLocation;
 
 use App\PurchaseLine;
+use App\Stores;
 use App\Transaction;
 use App\TransactionSellLinesPurchaseLines;
 use App\Utils\ModuleUtil;
@@ -199,6 +200,8 @@ class StockTransferController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        // dd(Stores::find(1));
      
         if ($request->transfer_location_id == null && $request->transfer_type == 0) {
             $request->merge(['transfer_location_id' => $request->location_id]);
@@ -321,7 +324,7 @@ class StockTransferController extends Controller
             if (!empty($purchase_lines)) {
                 $purchase_transfer->purchase_lines()->createMany($purchase_lines);
             }
-
+            
             //Decrease product stock from sell location
             //And increase product stock at purchase location
             if ($status = 'completed') {
@@ -333,26 +336,30 @@ class StockTransferController extends Controller
                         if (!empty($product['base_unit_multiplier'])) {
                             $decrease_qty = $decrease_qty * $product['base_unit_multiplier'];
                         }
-
                         $this->productUtil->decreaseProductQuantity(
                             $product['product_id'],
                             $product['variation_id'],
                             $sell_transfer->location_id,
                             $decrease_qty
                         );
-
+                     
+                        
                         $this->productUtil->updateProductQuantity(
                             $purchase_transfer->location_id,
                             $product['product_id'],
+                           
                             $product['variation_id'],
                             $decrease_qty,
                             0,
                             null,
-                            false
+                            false,
+                            request('store_to')
                         );
+                        
                     }
                 }
 
+                
                 //Adjust stock over selling if found
                 $this->productUtil->adjustStockOverSelling($purchase_transfer);
 
@@ -372,6 +379,7 @@ class StockTransferController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
