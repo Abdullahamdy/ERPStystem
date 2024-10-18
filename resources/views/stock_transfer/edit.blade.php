@@ -14,7 +14,7 @@
 	<div class="box box-solid">
 		<div class="box-body">
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<div class="form-group">
 						{!! Form::label('transaction_date', __('messages.date') . ':*') !!}
 						<div class="input-group">
@@ -25,16 +25,28 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<div class="form-group">
 						{!! Form::label('ref_no', __('purchase.ref_no').':') !!}
 						{!! Form::text('ref_no', $sell_transfer->ref_no, ['class' => 'form-control', 'readonly']); !!}
 					</div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<div class="form-group">
 						{!! Form::label('status', __('sale.status').':*') !!} @show_tooltip(__('lang_v1.completed_status_help'))
 						{!! Form::select('status', $statuses, $sell_transfer->status, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required', 'id' => 'status']); !!}
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						{!! Form::label('status', __('نوع التحويل') . ':*') !!} @show_tooltip(__('lang_v1.completed_status_help'))
+						{!! Form::select('status', $transferType, $sell_transfer->transfer_type, [
+							'class' => 'form-control select2',
+							'placeholder' => __('messages.please_select'),
+							'required',
+							'id' => 'transferType',
+							'name'=>'transfer_type'
+							]) !!}
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -44,10 +56,38 @@
 						{!! Form::select('location_id', $business_locations, $sell_transfer->location_id, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'id' => 'location_id', 'disabled']); !!}
 					</div>
 				</div>
+				<div class="col-sm-6 store_from" >
+					<div class="form-group">
+						{!! Form::label('location_id', 'من مخزن ' . ':*') !!}
+						{!! Form::select('location_id', $stores, $purchase_transfer->store_from,[
+							'class' => 'form-control select2',
+							'placeholder' => __('messages.please_select'),
+							'required',
+							'id' => 'location_id',
+							'name' => 'store_from',
+							'disabled'
+						]) !!}
+					</div>
+				</div>
+				@if($sell_transfer->transfer_type == 1)
 				<div class="col-sm-6">
 					<div class="form-group">
 						{!! Form::label('transfer_location_id', __('lang_v1.location_to').':*') !!}
 						{!! Form::select('transfer_location_id', $business_locations, $purchase_transfer->location_id, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'id' => 'transfer_location_id', 'disabled']); !!}
+					</div>
+				</div>
+				@endif
+				<div class="col-sm-6 store_to" >
+					<div class="form-group">
+						{!! Form::label('location_id', 'إلي مخزن ' . ':*') !!}
+						{!! Form::select('location_id', $stores, $sell_transfer->store_to, [
+							'class' => 'form-control select2',
+							'placeholder' => __('messages.please_select'),
+							'required',
+							'id' => 'location_id',
+							'name' => 'store_to',
+							'disabled'
+						]) !!}
 					</div>
 				</div>
 				
@@ -157,4 +197,6 @@
 	<script type="text/javascript">
 		__page_leave_confirmation('#stock_transfer_form');
 	</script>
+
+
 @endsection

@@ -200,7 +200,7 @@ class StockTransferController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+      
         // dd(Stores::find(1));
      
         if ($request->transfer_location_id == null && $request->transfer_type == 0) {
@@ -230,6 +230,7 @@ class StockTransferController extends Controller
             $input_data['business_id'] = $business_id;
             $input_data['created_by'] = $user_id;
             $input_data['store_to'] = $request->input('store_from');
+            $input_data['transfer_type'] = $request->input('transfer_type');
             $input_data['transaction_date'] = $this->productUtil->uf_date($input_data['transaction_date'], true);
             $input_data['shipping_charges'] = $this->productUtil->num_uf($input_data['shipping_charges']);
             $input_data['payment_status'] = 'paid';
@@ -310,6 +311,7 @@ class StockTransferController extends Controller
             $input_data['type'] = 'purchase_transfer';
             $input_data['store_from'] = $request->input('store_to');
             $input_data['location_id'] = $request->input('transfer_location_id');
+            $input_data['transfer_type'] = $request->input('transfer_type');
             $input_data['transfer_parent_id'] = $sell_transfer->id;
             $input_data['status'] = $status == 'completed' ? 'received' : $status;
 
@@ -633,7 +635,8 @@ class StockTransferController extends Controller
         $business_id = request()->session()->get('user.business_id');
 
         $business_locations = BusinessLocation::forDropdown($business_id);
-
+        $stores = Stores::pluck('name_ar', 'id')->toArray();
+        $transferType = $this->transferType();
         $statuses = $this->stockTransferStatuses();
 
         $sell_transfer = Transaction::where('business_id', $business_id)
@@ -648,6 +651,8 @@ class StockTransferController extends Controller
                 ->where('status', '!=', 'received')
                 ->where('type', 'purchase_transfer')
                 ->first();
+            
+             
 
         $products = [];
         foreach ($sell_transfer->sell_lines as $sell_line) {
@@ -675,7 +680,7 @@ class StockTransferController extends Controller
         }
 
         return view('stock_transfer.edit')
-                ->with(compact('sell_transfer', 'purchase_transfer', 'business_locations', 'statuses', 'products'));
+                ->with(compact('sell_transfer','stores','transferType', 'purchase_transfer', 'business_locations', 'statuses', 'products'));
     }
 
     /**
