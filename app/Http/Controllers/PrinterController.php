@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Printer;
+use App\Product;
 use Datatables;
 use Illuminate\Http\Request;
 
@@ -63,10 +64,11 @@ class PrinterController extends Controller
         }
 
         $capability_profiles = Printer::capability_profiles();
+        $products = Product::pluck('name','id')->toArray();
         $connection_types = Printer::connection_types();
 
         return view('printer.create')
-            ->with(compact('capability_profiles', 'connection_types'));
+            ->with(compact('capability_profiles','products', 'connection_types'));
     }
 
     /**
@@ -80,22 +82,21 @@ class PrinterController extends Controller
         if (!auth()->user()->can('access_printers')) {
              abort(403, 'Unauthorized action.');
         }
-
         try {
             $business_id = $request->session()->get('user.business_id');
             $input = $request->only(['name', 'connection_type', 'capability_profile', 'ip_address', 'port', 'path', 'char_per_line']);
 
             $input['business_id'] = $business_id;
             $input['created_by'] = $request->session()->get('user.id');
-            ;
-
+            $productIds = $request->get('product_ids');
+            $products = !empty($productIds) ?  json_encode($productIds) : "[]";
+            $input['product_ids'] = $products;
             if ($input['connection_type'] == 'network') {
                 $input['path'] = '';
             } elseif (in_array($input['connection_type'], ['windows', 'linux'])) {
                 $input['ip_address'] = '';
                 $input['port'] = '';
             }
-
             $printer = new Printer;
             $printer->fill($input)->save();
 
@@ -138,12 +139,14 @@ class PrinterController extends Controller
 
         $business_id = request()->session()->get('user.business_id');
         $printer = Printer::where('business_id', $business_id)->find($id);
-
+        $products = Product::pluck('name', 'id')->toArray();
+    
+        $selectedProductIds = json_decode($printer->product_ids) ?: [];
         $capability_profiles = Printer::capability_profiles();
         $connection_types = Printer::connection_types();
 
         return view('printer.edit')
-            ->with(compact('printer', 'capability_profiles', 'connection_types'));
+            ->with(compact('printer', 'products','selectedProductIds','capability_profiles', 'connection_types'));
     }
 
     /**
@@ -171,6 +174,7 @@ class PrinterController extends Controller
                 $input['ip_address'] = '';
                 $input['port'] = '';
             }
+            $input['product_ids'] = json_encode($request->input('product_ids'));
 
             $printer->fill($input)->save();
 

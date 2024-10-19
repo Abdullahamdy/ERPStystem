@@ -38,6 +38,19 @@
 
         <div class="col-sm-12">
           <div class="form-group">
+              {!! Form::label('products', 'القسم التابع' . ':*') !!}
+              {!! Form::select('product_ids[]', $products, json_decode($printer->product_ids), [
+                  'class' => 'form-control select2',
+                  'placeholder' => __('messages.please_select'),
+                  'required',
+                  'id' => 'products',
+                  'multiple'
+              ]) !!}
+          </div>
+      </div>
+
+        <div class="col-sm-12">
+          <div class="form-group">
             {!! Form::label('capability_profile',__('printer.capability_profile') . ':*') !!}
             @show_tooltip(__('tooltip.capability_profile'))
             {!! Form::select('capability_profile', $capability_profiles, null, ['class' => 'form-control select2']); !!}
@@ -87,4 +100,10 @@
   {!! Form::close() !!}
 </section>
 <!-- /.content -->
+
+  <script>
+    $(document).ready(function() {
+        $('#products').select2();
+    });
+</script>
 @endsection
