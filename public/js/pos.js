@@ -1992,16 +1992,16 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
 
                            
                     }
-                    let totalprice = parseFloat($('.price_total').html().replace(/,/g, '')) || 0;
-                    let ordertax = parseFloat($('#order_tax').html().replace(/,/g, '')) || 0;
-                    let charangeamount = parseFloat($('#shipping_charges_amount').html().replace(/,/g, '')) || 0;
-                    let total_discount = parseFloat($('#total_discount').html().replace(/,/g, '')) || 0;
-            
-                    // Calculate the final total by adding tax, charges, and then subtracting the discount
-                    let finalTotal = totalprice + ordertax + charangeamount - total_discount;
-            
-                    // Display the final total in the `#ttotal_price` element with two decimal places
-                    $('#ttotal_price').html(finalTotal.toFixed(2));
+ let totalprice = parseFloat($('.price_total').html().replace(/,/g, '')) || 0;
+            let ordertax = parseFloat($('#order_tax').html().replace(/,/g, '')) || 0;
+            let charangeamount = parseFloat($('#shipping_charges_amount').html().replace(/,/g, '')) || 0;
+            let total_discount = parseFloat($('#total_discount').html().replace(/,/g, '')) || 0;
+    
+            // Calculate the final total by adding tax, charges, and then subtracting the discount
+            let finalTotal = totalprice + ordertax + charangeamount - total_discount;
+    
+            // Display the final total in the `#ttotal_price` element with two decimal places
+            $('#ttotal_price').html(finalTotal.toFixed(2));
                     //scroll bottom of items list
                     $(".pos_product_div").animate({ scrollTop: $('.pos_product_div').prop("scrollHeight")}, 1000);
                 } else {
