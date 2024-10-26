@@ -105,6 +105,7 @@
     <!-- Product Grid -->
  <div class="product-grid" id="product_grid">
     @forelse($products as $product)
+  
         <div class="product_box product-item" 
              data-category-id="{{$product->category_id}}" 
              data-brand-id="{{$product->brand_id}}" 
@@ -114,7 +115,8 @@
              data-available="{{ $product->enable_stock ? 'true' : 'false' }}">
              
             <!-- Price Badge -->
-            <div class="price-badge">
+            <div class="price-badge" >
+                <input type="hidden" class="updatefortotal_price" value="{{ number_format($product->selling_price, 2) }}">
                 {{ number_format($product->selling_price, 2) }}$
             </div>
 
@@ -206,5 +208,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
+
 </script>
 @endsection

@@ -21,10 +21,11 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="form-group">
-            <div class="input-group">
+        {{-- <div class="form-group"> --}}
+            {{-- <div class="input-group">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default bg-white btn-flat" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search-plus"></i></button>
+                    <button type="button" class="btn btn-default bg-white btn-flat" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}">
+                        <i class="fas fa-search-plus"></i></button>
                 </div>
                 {!! Form::text('search_product', null, ['class' => 'form-control mousetrap', 'id' => 'search_product', 'placeholder' => __('lang_v1.search_product_placeholder'),
                 'disabled' => is_null($default_location)? true : false,
@@ -36,11 +37,16 @@
                     @endif
                     <button type="button" class="btn btn-default bg-white btn-flat pos_add_quick_product" data-href="{{action('ProductController@quickAdd')}}" data-container=".quick_add_product_modal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
                 </span>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
+            </div> --}}
+        {{-- </div> --}}
+
+
+
+
+
+{{-- type service --}}
+
+
     @if(!empty($pos_settings['show_invoice_layout']))
     <div class="col-md-4">
         <div class="form-group">
@@ -114,7 +120,7 @@
     @endif
 
    @if(in_array('types_of_service', $enabled_modules) && !empty($types_of_service))
-    <div class="col-md-4 col-sm-6">
+    <div class="col-md-12 col-sm-6">
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon">
@@ -157,7 +163,40 @@
         <div class="col-md-3"></div>
     </span>
     @endif
+
+{{-- end  type service --}}
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
+
+
+
 
 <!-- Include Module Fields -->
 @if(!empty($pos_module_data))
@@ -168,7 +207,11 @@
 @endforeach
 @endif
 
+
+
 <div class="row">
+
+    
     <div class="col-sm-12 pos_product_div">
         <input type="hidden" name="sell_price_tax" id="sell_price_tax" value="{{$business_details->sell_price_tax}}">
         <input type="hidden" id="product_row_count" value="0">
@@ -178,7 +221,8 @@
         <table class="table table-condensed table-bordered table-striped table-responsive" id="pos_table">
             <thead>
                 <tr>
-                    <th class="tex-center @if(!empty($pos_settings['inline_service_staff'])) col-md-3 @else col-md-4 @endif">
+                    <th class="tex-center @if(!empty($pos_settings['inline_service_staff'])) col-md-3
+                     @else col-md-4 @endif">
                         @lang('sale.product') @show_tooltip(__('lang_v1.tooltip_sell_product_column'))
                     </th>
                     <th class="text-center col-md-3">
@@ -198,7 +242,12 @@
                     <th class="text-center"><i class="fas fa-times" aria-hidden="true"></i></th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody
+            
+            
+            
+            
+            ></tbody>
         </table>
     </div>
 </div>

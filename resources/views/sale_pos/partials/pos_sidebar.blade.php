@@ -24,14 +24,14 @@
 
             <!-- Custom carousel-style category menu -->
             <div class="category-carousel">
-                <div class="carousel-item category-item active" data-value="all">
+                {{-- <div class="carousel-item category-item active" data-value="all">
                     <img src="https://img.icons8.com/ios-filled/50/000000/menu.png" alt="All Categories">
                     <div>@lang('lang_v1.all_category')</div>
-                </div>
+                </div> --}}
                 @foreach($categories as $category)
                     <div class="carousel-item category-item" data-value="{{ $category['id'] }}">
-                        <img src="@if(!empty($category['icon'])) 
-                                    {{ asset('path/to/category/icon/' . $category['icon']) }} 
+                        <img src="@if(!empty($category['image_url'])) 
+                           {{ $category['image_url']}}
                                  @else 
                                     https://img.icons8.com/ios-filled/50/000000/user-male-circle.png 
                                  @endif" 
@@ -179,6 +179,7 @@
 
     // Attach click events to brand items
     brandItems.forEach(brand => {
+        
         brand.addEventListener('click', function () {
             selectedBrandId = this.getAttribute('data-value');
             brandSelect.value = selectedBrandId; // Update the hidden select value

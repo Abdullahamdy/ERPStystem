@@ -149,7 +149,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="posShippingModalUpdate">@lang('messages.update')</button>
+				<button type="button" class="btn btn-primary updatefortotal_price" id="posShippingModalUpdate">@lang('messages.update')</button>
 			    <button type="button" class="btn btn-default" data-dismiss="modal">@lang('messages.cancel')</button>
 			</div>
 		</div><!-- /.modal-content -->

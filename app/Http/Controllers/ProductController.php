@@ -244,10 +244,9 @@ class ProductController extends Controller
                                 '<li><a href="' . action('ProductController@create', ["d" => $row->id]) . '"><i class="fa fa-copy"></i> ' . __("lang_v1.duplicate_product") . '</a></li>';
                         }
 
-                        if (!empty($row->media->first())) {
-
+                        if (!empty($row->media)) {
                             $html .=
-                                '<li><a href="' . $row->media->first()->display_url . '" download="' . $row->media->first()->display_name . '"><i class="fas fa-download"></i> ' . __("lang_v1.product_brochure") . '</a></li>';
+                                '<li><a href="' . $row->media->display_url . '" download="' . $row->media->display_name . '"><i class="fas fa-download"></i> ' . __("lang_v1.product_brochure") . '</a></li>';
                         }
 
                         $html .= '</ul></div>';

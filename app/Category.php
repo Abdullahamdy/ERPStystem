@@ -22,6 +22,7 @@ class Category extends Model
      * @var array
      */
     protected $guarded = ['id'];
+    protected $appends = ['image_url'];
 
     /**
      * Combines Category and sub-category
@@ -29,6 +30,20 @@ class Category extends Model
      * @param int $business_id
      * @return array
      */
+
+     public function getImageUrlAttribute()
+     {
+         if ($this->media){
+             $image_url = asset('/uploads/media/' . $this->media->file_name);
+         } else {
+             $image_url = asset('/img/default.png');
+         }
+         return $image_url;
+     }
+     public function media()
+     {
+         return $this->morphOne(\App\Media::class, 'model');
+     }
     public static function catAndSubCategories($business_id)
     {
         $all_categories = Category::where('business_id', $business_id)

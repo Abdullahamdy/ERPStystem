@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Media;
 use App\Utils\ModuleUtil;
+use App\Utils\ProductUtil;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -13,17 +15,17 @@ class TaxonomyController extends Controller
      * All Utils instance.
      *
      */
-    protected $moduleUtil;
+    protected $moduleUtil,$ProductUtil;
 
     /**
      * Constructor
      *
-     * @param ProductUtils $product
      * @return void
      */
-    public function __construct(ModuleUtil $moduleUtil)
+    public function __construct(ModuleUtil $moduleUtil ,ProductUtil $ProductUtil)
     {
         $this->moduleUtil = $moduleUtil;
+        $this->ProductUtil = $ProductUtil;
     }
 
     /**
@@ -77,10 +79,12 @@ class TaxonomyController extends Controller
                     } else {
                         return $row->name;
                     }
+                }) ->editColumn('image', function ($row) {
+                    return '<div style="display: flex;"><img src="' . $row->image_url . '" alt="Product image" class="product-thumbnail-small"></div>';
                 })
                 ->removeColumn('id')
                 ->removeColumn('parent_id')
-                ->rawColumns(['action'])
+                ->rawColumns(['action','image'])
                 ->make(true);
         }
 
@@ -103,7 +107,6 @@ class TaxonomyController extends Controller
         $business_id = request()->session()->get('user.business_id');
 
         $module_category_data = $this->moduleUtil->getTaxonomyData($category_type);
-
         $categories = Category::where('business_id', $business_id)
                         ->where('parent_id', 0)
                         ->where('category_type', $category_type)
@@ -143,8 +146,9 @@ class TaxonomyController extends Controller
             }
             $input['business_id'] = $request->session()->get('user.business_id');
             $input['created_by'] = $request->session()->get('user.id');
-
+            
             $category = Category::create($input);
+            Media::uploadMedia($category->business_id, $category, $request, 'image', true);
             $output = ['success' => true,
                             'data' => $category,
                             'msg' => __("category.added_success")

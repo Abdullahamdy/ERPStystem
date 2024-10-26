@@ -1,7 +1,9 @@
 <div class="modal-dialog" role="document">
   <div class="modal-content">
 
-    {!! Form::open(['url' => action('TaxonomyController@store'), 'method' => 'post', 'id' => 'category_add_form' ]) !!}
+    {!! Form::open(['url' => action('TaxonomyController@store'), 'method' => 'post', 'id' => 'category_add_form',  
+     'enctype' => 'multipart/form-data',
+     'files' => true ]) !!}
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h4 class="modal-title">@lang( 'messages.add' )</h4>
@@ -23,6 +25,35 @@
         {!! Form::label('name', $name_label . ':*') !!}
           {!! Form::text('name', null, ['class' => 'form-control', 'required', 'placeholder' => $name_label]); !!}
       </div>
+
+   
+
+    <!-- Image Upload -->
+   <!-- Image Upload -->
+<div class="form-group">
+  {!! Form::label('image', __('lang_v1.product_image') . ':') !!}
+  <div class="input-group">
+      <span class="input-group-btn">
+          <span class="btn btn-default btn-file">
+              Browse {!! Form::file('image', [
+                  'id' => 'upload_image',
+                  'accept' => 'image/*',
+                  'class' => 'form-control',
+                  'onchange' => 'previewImage(event)'
+              ]) !!}
+          </span>
+      </span>
+      <input type="text" class="form-control" readonly>
+  </div>
+  <img id="preview_image" src="#" alt="Preview" style="max-width: 100px; margin-top: 10px; display: none;">
+  <small>
+      <p class="help-block">
+          @lang('purchase.max_file_size', ['size' => config('constants.document_size_limit') / 1000000])
+          <br>
+          @lang('lang_v1.aspect_ratio_should_be_1_1')
+      </p>
+  </small>
+</div>
       @if($cat_code_enabled)
       <div class="form-group">
         {!! Form::label('short_code', $cat_code_label . ':') !!}
@@ -34,6 +65,7 @@
         {!! Form::label('description', __( 'lang_v1.description' ) . ':') !!}
         {!! Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => __( 'lang_v1.description'), 'rows' => 3]); !!}
       </div>
+    
       @if(!empty($parent_categories) && $enable_sub_category)
         <div class="form-group">
             <div class="checkbox">
@@ -58,3 +90,18 @@
 
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
+
+<script>
+  function previewImage(event) {
+      const input = event.target;
+      const previewImage = document.getElementById('preview_image');
+      
+      if (input.files && input.files[0]) {
+          previewImage.src = URL.createObjectURL(input.files[0]);
+          previewImage.style.display = 'block';
+      } else {
+          previewImage.src = '#';
+          previewImage.style.display = 'none';
+      }
+  }
+</script>

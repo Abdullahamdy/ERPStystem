@@ -575,7 +575,7 @@
         <div class="col-md-12">
             <div class="row">
                 <!-- Customer Info and Product Search Section -->
-                <div class="col-md-6 no-padding pr-12">
+                <div class="col-md-4 no-padding pr-12">
                     <div class="box box-solid mb-12 mb-40">
                         <div class="box-body pb-0">
                             {!! Form::hidden('location_id', optional($default_location)->id , ['id' => 'location_id', 'data-receipt_printer_type' => optional($default_location)->receipt_printer_type ?? 'browser', 'data-default_payment_accounts' => optional($default_location)->default_payment_accounts ?? '']) !!}
@@ -600,7 +600,7 @@
                 </div>
                 <!-- Product Sidebar for Suggestions -->
                 @if(empty($pos_settings['hide_product_suggestion']) && !isMobile())
-                <div class="col-md-6 no-padding" style="padding-right: 40px !important">
+                <div class="col-md-8 no-padding" style="padding-right: 40px !important">
                     @include('sale_pos.partials.pos_sidebar')
                 </div>
                 @endif
@@ -634,6 +634,17 @@
 @endsection
 
 @section('javascript')
+
+
+
+
+
+
+
+
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

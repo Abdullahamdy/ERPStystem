@@ -31,8 +31,8 @@ class Product extends Model
      */
     public function getImageUrlAttribute()
     {
-        if (!empty($this->image)) {
-            $image_url = asset('/uploads/img/' . rawurlencode($this->image));
+        if ($this->media){
+            $image_url = asset('/uploads/media/' . $this->media->file_name);
         } else {
             $image_url = asset('/img/default.png');
         }
@@ -212,7 +212,7 @@ class Product extends Model
 
     public function media()
     {
-        return $this->morphMany(\App\Media::class, 'model');
+        return $this->morphOne(\App\Media::class, 'model');
     }
 
     public function rack_details()

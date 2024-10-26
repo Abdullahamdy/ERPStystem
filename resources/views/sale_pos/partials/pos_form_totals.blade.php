@@ -17,7 +17,7 @@
 
     .table-condensed td {
         padding: 10px;
-        font-size: 1rem;
+        font-size: 16px;
         vertical-align: middle;
     }
 
@@ -82,6 +82,9 @@
     .input-hidden {
         display: none;
     }
+    .table-condensed, .table-condensed td {
+    border: 1px solid #ddd; /* Sets the color and thickness of the borders */
+}
 </style>
 
 
@@ -91,19 +94,17 @@
         <table class="table table-condensed">
             <tr>
                 <!-- Total Quantity -->
-                <td>
+                {{-- <td>
                     <b>@lang('sale.item'):</b> &nbsp;
                     <span class="total_quantity">0</span>
-                </td>
+                </td> --}}
 
                 <!-- Total Price -->
                 <td>
-                    <b>@lang('sale.total'):</b> &nbsp;
+                    <b>@lang('sale.sub_total'):</b> &nbsp;
                     <span class="price_total">0</span>
                 </td>
-            </tr>
-            <tr>
-                <!-- Discount -->
+
                 <td>
                     <b>
                         @if($is_discount_enabled)
@@ -124,6 +125,23 @@
                     <input type="hidden" name="rp_redeemed_amount" id="rp_redeemed_amount" value="@if(empty($edit)){{'0'}}@else {{$transaction->rp_redeemed_amount}} @endif">
                 </td>
 
+                <td>
+                    <b>@lang('sale.shipping')(+):</b>
+                    <div class="highlight-edit">
+                        <span id="shipping_charges_amount">0</span>
+                        <i class="fas fa-edit edit-icon" title="@lang('sale.shipping')" data-toggle="modal" data-target="#posShippingModal"></i>
+                    </div>
+                    <input type="hidden" name="shipping_details" id="shipping_details" value="@if(empty($edit)){{''}}@else{{$transaction->shipping_details}}@endif">
+                    <input type="hidden" name="shipping_address" id="shipping_address" value="@if(empty($edit)){{''}}@else{{$transaction->shipping_address}}@endif">
+                    <input type="hidden" name="shipping_status" id="shipping_status" value="@if(empty($edit)){{''}}@else{{$transaction->shipping_status}}@endif">
+                    <input type="hidden" name="delivered_to" id="delivered_to" value="@if(empty($edit)){{''}}@else{{$transaction->delivered_to}}@endif">
+                    <input type="hidden" name="shipping_charges" id="shipping_charges" value="@if(empty($edit)){{@num_format(0.00)}} @else{{@num_format($transaction->shipping_charges)}} @endif" data-default="0.00">
+                </td>
+            </tr>
+            <tr>
+                <!-- Discount -->
+            
+
                 <!-- Order Tax -->
                 <td class="@if($pos_settings['disable_order_tax'] != 0) hide @endif">
                     <b>@lang('sale.order_tax')(+):</b>
@@ -142,27 +160,20 @@
                 </td>
 
                 <!-- Shipping Charges -->
-                <td>
-                    <b>@lang('sale.shipping')(+):</b>
-                    <div class="highlight-edit">
-                        <span id="shipping_charges_amount">0</span>
-                        <i class="fas fa-edit edit-icon" title="@lang('sale.shipping')" data-toggle="modal" data-target="#posShippingModal"></i>
-                    </div>
-                    <input type="hidden" name="shipping_details" id="shipping_details" value="@if(empty($edit)){{''}}@else{{$transaction->shipping_details}}@endif">
-                    <input type="hidden" name="shipping_address" id="shipping_address" value="@if(empty($edit)){{''}}@else{{$transaction->shipping_address}}@endif">
-                    <input type="hidden" name="shipping_status" id="shipping_status" value="@if(empty($edit)){{''}}@else{{$transaction->shipping_status}}@endif">
-                    <input type="hidden" name="delivered_to" id="delivered_to" value="@if(empty($edit)){{''}}@else{{$transaction->delivered_to}}@endif">
-                    <input type="hidden" name="shipping_charges" id="shipping_charges" value="@if(empty($edit)){{@num_format(0.00)}} @else{{@num_format($transaction->shipping_charges)}} @endif" data-default="0.00">
-                </td>
+               
 
-                <!-- Packing Charge (optional) -->
+                {{-- <!-- Packing Charge (optional) -->
                 @if(in_array('types_of_service', $enabled_modules))
                     <td>
                         <b>@lang('lang_v1.packing_charge')(+):</b>
                         <span id="packing_charge_text">0</span>
                     </td>
-                @endif
-
+                @endif --}}
+                <td> </td>
+                <td>
+                    <b>@lang('المجموع الكلي')(+):</b>
+                    <span id="ttotal_price">0</span>
+                </td>
                 <!-- Round Off (if applicable) -->
                 @if(!empty($pos_settings['amount_rounding_method']) && $pos_settings['amount_rounding_method'] > 0)
                     <td>
@@ -175,3 +186,5 @@
         </table>
     </div>
 </div>
+
+

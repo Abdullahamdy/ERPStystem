@@ -20,6 +20,7 @@ return [
     'invoice_added' => 'Invoice added successfully',
     'item' => 'Items',
     'total' => 'Total',
+    "sub_total" => "Sub Total" ,
     'order_tax' => 'Order Tax',
     'discount' => 'Discount',
     'total_payable' => 'Total Payable',

@@ -7,7 +7,7 @@
     }
 
     .search-bar {
-           width: 730px !important;
+           width: 927px  !important;
         /*max-width: 400px;*/
         padding: 10px 15px;
         border: 1px solid #ddd;

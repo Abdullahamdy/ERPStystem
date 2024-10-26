@@ -1247,6 +1247,24 @@ const amiriFont = "AAEAAAAPAIAAAwBwR0RFRn79k34AAAHoAAACAEdQT1NFvGBPAAFeHAAA2oBHU
         __write_number($('input#tax_calculation_amount'), tax_rate);
         pos_total_row();
     });
+  
+  
+    
+    $(document).ready(function() {
+        $('.updatefortotal_price').on('click', function() {
+            let totalprice = parseFloat($('.price_total').html().replace(/,/g, '')) || 0;
+            let ordertax = parseFloat($('#order_tax').html().replace(/,/g, '')) || 0;
+            let charangeamount = parseFloat($('#shipping_charges_amount').html().replace(/,/g, '')) || 0;
+            let total_discount = parseFloat($('#total_discount').html().replace(/,/g, '')) || 0;
+    
+            // Calculate the final total by adding tax, charges, and then subtracting the discount
+            let finalTotal = totalprice + ordertax + charangeamount - total_discount;
+    
+            // Display the final total in the `#ttotal_price` element with two decimal places
+            $('#ttotal_price').html(finalTotal.toFixed(2));
+        });
+    });
+
 
     $(document).on('click', '.add_new_customer', function() {
         $('#customer_id').select2('close');
@@ -1807,19 +1825,18 @@ function get_recent_transactions(status, element_obj) {
 
 //variation_id is null when weighing_scale_barcode is used.
 function pos_product_row(variation_id = null, purchase_line_id = null, weighing_scale_barcode = null, quantity = 1) {
-
     //Get item addition method
     var item_addtn_method = 0;
     var add_via_ajax = true;
-
+    
     if (variation_id != null && $('#item_addition_method').length) {
         item_addtn_method = $('#item_addition_method').val();
     }
-
+    
     if (item_addtn_method == 0) {
         add_via_ajax = true;
     } else {
-        var is_added = false;
+        var is_added = true;
 
         //Search for variation id in each row of pos table
         $('#pos_table tbody')
@@ -1915,6 +1932,7 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
             dataType: 'json',
             success: function(result) {
                 if (result.success) {
+                
                     $('table#pos_table tbody')
                         .append(result.html_content)
                         .find('input.pos_quantity');
@@ -1923,6 +1941,16 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
                     var this_row = $('table#pos_table tbody')
                         .find('tr')
                         .last();
+
+                        $('table#pos_table tbody tr').css('background-color', '');
+                        $('table#pos_table tbody')
+                        .find('tr')
+                        .last()
+                        .css('background-color', 'rgb(199, 233, 199)');
+    
+                       
+
+
                     pos_each_row(this_row);
 
                     //For initial discount if present
@@ -1940,6 +1968,7 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
                         var new_row = $('table#pos_table tbody')
                             .find('tr')
                             .last();
+                          
                         new_row.find('.row_edit_product_price_model').modal('show');
                     }
 
@@ -1956,9 +1985,23 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
                             .find('tr')
                             .last()
                             .find('td:first')
-                            .append(result.html_modifier);
-                    }
 
+                            .append(result.html_modifier);
+
+
+
+                           
+                    }
+                    let totalprice = parseFloat($('.price_total').html().replace(/,/g, '')) || 0;
+                    let ordertax = parseFloat($('#order_tax').html().replace(/,/g, '')) || 0;
+                    let charangeamount = parseFloat($('#shipping_charges_amount').html().replace(/,/g, '')) || 0;
+                    let total_discount = parseFloat($('#total_discount').html().replace(/,/g, '')) || 0;
+            
+                    // Calculate the final total by adding tax, charges, and then subtracting the discount
+                    let finalTotal = totalprice + ordertax + charangeamount - total_discount;
+            
+                    // Display the final total in the `#ttotal_price` element with two decimal places
+                    $('#ttotal_price').html(finalTotal.toFixed(2));
                     //scroll bottom of items list
                     $(".pos_product_div").animate({ scrollTop: $('.pos_product_div').prop("scrollHeight")}, 1000);
                 } else {
@@ -3010,6 +3053,9 @@ $("#sales_order_ids").on("select2:select", function (e) {
                     var this_row = $('table#pos_table tbody')
                         .find('tr')
                         .last();
+
+
+
                     pos_each_row(this_row);
 
                     product_row = parseInt(product_row) + 1;
