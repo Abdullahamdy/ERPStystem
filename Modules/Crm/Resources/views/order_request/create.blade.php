@@ -52,7 +52,6 @@
 						<div class="input-group">
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default bg-white btn-flat" data-toggle="modal" data-target="#configure_search_modal" title="{{__('lang_v1.configure_product_search')}}"><i class="fas fa-search-plus"></i></button>
-
 							</div>
 							{!! Form::text('or_search_product', null, ['class' => 'form-control mousetrap', 'id' => 'or_search_product', 'placeholder' => __('lang_v1.search_product_placeholder'),
 							'disabled' => is_null($default_location)? true : false,
@@ -235,7 +234,6 @@
 	                if (item.variation_group_price) {
 	                    selling_price = item.variation_group_price;
 	                }
-				
 	                string +=
 	                    ' (' +
 	                    item.sub_sku +
@@ -243,7 +241,6 @@
 	                    '<br> Price: ' +
 	                    selling_price +
 	                    ' (Out of stock) </li>';
-						console.log('new')
 	                return $(string).appendTo(ul);
 	            } else {
 	                var string = '<div>' + item.name;
