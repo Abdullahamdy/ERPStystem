@@ -102,7 +102,7 @@ class TransactionUtil extends Util
             'selling_price_group_id' => isset($input['selling_price_group_id']) ? $input['selling_price_group_id'] : null,
             'pay_term_number' => $pay_term_number,
             'pay_term_type' => $pay_term_type,
-            'is_suspend' => !empty($input['is_suspend']) ? 1 : 0,
+            'is_suspend' => !empty($input['is_suspend']) ? $input['is_suspend'] : 0,
             'is_recurring' => !empty($input['is_recurring']) ? $input['is_recurring'] : 0,
             'recur_interval' => !empty($input['recur_interval']) ? $input['recur_interval'] : 1,
             'recur_interval_type' => !empty($input['recur_interval_type']) ? $input['recur_interval_type'] : null,

@@ -1,5 +1,6 @@
 <script type="text/javascript">
 	$(document).ready( function() {
+		console.log('Abdullah2')
 		//shortcut for express checkout
 		@if(!empty($shortcuts["pos"]["express_checkout"]) && ($pos_settings['disable_express_checkout'] == 0))
 			Mousetrap.bind('{{$shortcuts["pos"]["express_checkout"]}}', function(e) {

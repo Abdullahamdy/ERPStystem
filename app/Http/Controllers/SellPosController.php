@@ -111,6 +111,7 @@ class SellPosController extends Controller
      */
     public function index()
     {
+
         if (!auth()->user()->can('sell.view') && !auth()->user()->can('sell.create')) {
             abort(403, 'Unauthorized action.');
         }
@@ -656,6 +657,7 @@ class SellPosController extends Controller
     // }
      public function store(Request $request)
     {
+     
         if (!auth()->user()->can('sell.create') && !auth()->user()->can('direct_sell.access') && !auth()->user()->can('so.create') ) {
             abort(403, 'Unauthorized action.');
         }
@@ -759,10 +761,13 @@ class SellPosController extends Controller
                 $price_group_id = $price_group_id == 0 && $request->has('default_price_group') ? $request->input('default_price_group') : $price_group_id;
 
                 $input['is_suspend'] = isset($input['is_suspend']) && 1 == $input['is_suspend']  ? 1 : 0;
+              
                 if ($input['is_suspend']) {
                     $input['sale_note'] = !empty($input['additional_notes']) ? $input['additional_notes'] : null;
                 }
-
+                if($request->has('kitchen_send_to')){
+                    $input['sale_note'] = !empty($input['additional_notes']) ? $input['additional_notes'] : 'kitchen';
+                }
                 //Generate reference number
                 if (!empty($input['is_recurring'])) {
                     //Update reference count
@@ -826,24 +831,31 @@ class SellPosController extends Controller
 
                 //upload document
                 $input['document'] = $this->transactionUtil->uploadFile($request, 'sell_document', 'documents');
+                if($request->has('kitchen_send_to')&& $request->kitchen_send_to == "1"){
+                    $input['is_suspend'] = 2;
+                }
+              
 
                 $transaction = $this->transactionUtil->createSellTransaction($business_id, $input, $invoice_total, $user_id);
 
                 //Upload Shipping documents
                 Media::uploadMedia($business_id, $transaction, $request, 'shipping_documents', false, 'shipping_document');
                 
-
                 $this->transactionUtil->createOrUpdateSellLines($transaction, $input['products'], $input['location_id']);
                 
                 $change_return['amount'] = $input['change_return'] ?? 0;
                 $change_return['is_return'] = 1;
+                if(!$request->has('kitchen_send_to')){
 
-                $input['payment'][] = $change_return;
+                    $input['payment'][] = $change_return;
+                }
+
 
                 $is_credit_sale = isset($input['is_credit_sale']) && $input['is_credit_sale'] == 1 ? true : false;
-
+                if(!$request->has('kitchen_send_to')){
                 if (!$transaction->is_suspend && !empty($input['payment']) && !$is_credit_sale) {
                     $this->transactionUtil->createOrUpdatePaymentLines($transaction, $input['payment']);
+                }
                 }
 
                 //Check for final and do some processing.
@@ -876,14 +888,18 @@ class SellPosController extends Controller
                     }
 
                     //Add payments to Cash Register
+                    if(!$request->has('kitchen_send_to')){
                     if (!$is_direct_sale && !$transaction->is_suspend && !empty($input['payment']) && !$is_credit_sale) {
                         $this->cashRegisterUtil->addSellPayments($transaction, $input['payment']);
                     }
+                    }
 
                     //Update payment status
+                    if(!$request->has('kitchen_send_to')){
                     $payment_status = $this->transactionUtil->updatePaymentStatus($transaction->id, $transaction->final_total);
 
                     $transaction->payment_status = $payment_status;
+                    }
 
                     if ($request->session()->get('business.enable_rp') == 1) {
                         $redeemed = !empty($input['rp_redeemed']) ? $input['rp_redeemed'] : 0;

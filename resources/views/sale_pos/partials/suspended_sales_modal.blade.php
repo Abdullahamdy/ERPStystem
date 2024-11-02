@@ -19,7 +19,7 @@
 				@forelse($sales as $sale)
 					@if($sale->is_suspend)
 						<div class="col-xs-6 col-sm-3">
-							<div class="small-box bg-yellow">
+							<div @if($sale->is_suspend == 1) class="small-box bg-yellow"@else  class="small-box" style="background-color: #96c9bd !important" @endif>
 					            <div class="inner text-center">
 						            @if(!empty($sale->additional_notes))
 						            	<p><i class="fa fa-edit"></i> {{$sale->additional_notes}}</p>

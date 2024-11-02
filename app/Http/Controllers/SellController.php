@@ -73,6 +73,7 @@ class SellController extends Controller
      */
     public function index()
     {
+        
         $is_admin = $this->businessUtil->is_admin(auth()->user());
 
         if ( !$is_admin && !auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'so.view_all', 'so.view_own']) ) {
@@ -312,7 +313,7 @@ class SellController extends Controller
                     $with[] = 'service_staff';
                 }
 
-                $sales = $sells->where('transactions.is_suspend', 1)
+                $sales = $sells->where('transactions.is_suspend', 1)->orWhere('transactions.is_suspend', 2)
                             ->with($with)
                             ->addSelect('transactions.is_suspend', 'transactions.res_table_id', 'transactions.res_waiter_id', 'transactions.additional_notes')
                             ->get();

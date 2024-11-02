@@ -558,6 +558,11 @@ $(document).ready(function() {
             },
         });
     });
+    $('button#pos-finalize').click(function() {
+
+
+        
+    })
 
     //Finalize invoice, open payment modal
     $('button#pos-finalize').click(function() {
@@ -591,6 +596,14 @@ $(document).ready(function() {
 
     //Finalize without showing payment options
     $('button.pos-express-finalize').click(function() {
+       var is_kitchen = $(this).val();
+       pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="0">');
+
+       if(is_kitchen == 'send_to_kitchen'){
+        console.log('hie')
+        pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="1">');
+    }
+      
 
         //Check if product is present or not.
         if ($('table#pos_table tbody').find('.product_row').length <= 0) {
