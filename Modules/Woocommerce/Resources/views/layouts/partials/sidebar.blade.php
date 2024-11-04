@@ -10,6 +10,7 @@
 		    </a>
 
 		    <ul class="treeview-menu">
+				
 		    	<li class="{{ $request->segment(1) == 'woocommerce' && empty($request->segment(2)) ? 'active active-sub' : '' }}">
 					<a href="{{action('\Modules\Woocommerce\Http\Controllers\WoocommerceController@index')}}">
 						<i class="fa fa-refresh"></i>

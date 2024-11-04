@@ -358,6 +358,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
         Route::get('/add-selected-modifiers', 'Restaurant\ProductModifierSetController@add_selected_modifiers');
 
         Route::get('/kitchen', 'Restaurant\KitchenController@index');
+        Route::resource('/tickets', 'Restaurant\TicketController');
         Route::get('/kitchen/mark-as-cooked/{id}', 'Restaurant\KitchenController@markAsCooked');
         Route::post('/refresh-orders-list', 'Restaurant\KitchenController@refreshOrdersList');
         Route::post('/refresh-line-orders-list', 'Restaurant\KitchenController@refreshLineOrdersList');

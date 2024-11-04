@@ -9,6 +9,7 @@
         </span>
     </a>
     <ul class="treeview-menu">
+       
     	<li class="{{ $request->segment(2) == 'project' ? 'active active-sub' : '' }}">
             <a href="{{action('\Modules\Project\Http\Controllers\ProjectController@index')}}">
                 <i class="fas fa-check-circle"></i>

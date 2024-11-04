@@ -9,6 +9,7 @@
 	    </a>
 
 	    <ul class="treeview-menu">
+			
 	    	@can('manufacturing.access_recipe')
 		    	<li class="{{ $request->segment(1) == 'manufacturing' && in_array($request->segment(2), ['recipe', 'add-ingredient']) ? 'active active-sub' : '' }}">
 					<a href="{{action('\Modules\Manufacturing\Http\Controllers\RecipeController@index')}}">

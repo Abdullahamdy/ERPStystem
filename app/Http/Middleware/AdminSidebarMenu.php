@@ -489,6 +489,11 @@ class AdminSidebarMenu
                         ['icon' => 'fa fas fa-table', 'active' => request()->segment(2) == 'tables']
                     );
                     $sub->url(
+                        url('modules/tickets'),
+                        '- التذاكر',
+                        ['icon' => 'fa fas fa-table', 'active' => request()->segment(2) == 'tables']
+                    );
+                    $sub->url(
                         url('modules/kitchen'),
                         '- المطبخ',
                         ['icon' => 'fa fas fa-fire', 'active' => request()->segment(2) == 'kitchen']

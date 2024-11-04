@@ -4,7 +4,9 @@
 			{!! Form::label("card_number_$row_index", __('lang_v1.card_no')) !!}
 			{!! Form::text("payment[$row_index][card_number]", $payment_line['card_number'], ['class' => 'abdulah form-control', 'placeholder' => __('lang_v1.card_no'), 'id' => "card_number_$row_index"]); !!}
 		</div>
-	
+		<div class="form-group">
+			{{-- <input type="hidden" name="kitchen" id="kitchen_send_to" value=""> --}}
+		</div>
 	</div>
 	<div class="col-md-4">
 		<div class="form-group">
