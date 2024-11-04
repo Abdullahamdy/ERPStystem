@@ -24,6 +24,10 @@
                 {!! Form::label('product_count', __('ticket.product_count') . ':*') !!}
                 {!! Form::text('product_count', null, ['class' => 'form-control', 'required', 'placeholder' => __('ticket.product_count')]) !!}
             </div>
+            <div class="form-group">
+                {!! Form::label('price', __('ticket.product_count') . ':*') !!}
+                {!! Form::text('price', null, ['class' => 'form-control', 'required', 'placeholder' => __('ticket.price')]) !!}
+            </div>
 
             <div class="form-group">
                 {!! Form::label('status', __('ticket.status') . ':*') !!}

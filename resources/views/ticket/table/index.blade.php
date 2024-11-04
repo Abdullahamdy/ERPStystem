@@ -36,6 +36,7 @@
                             <th>@lang( 'ticket.product_count' )</th>
             				<th>@lang( 'ticket.products' )</th>
             				<th>@lang( 'ticket.number_of_day' )</th>
+            				<th>@lang( 'ticket.price' )</th>
             				<th>@lang( 'ticket.status' )</th>
             				<th>@lang('ticket.day_off')</th>
             				<th>@lang( 'ticket.action' )</th>
@@ -95,6 +96,7 @@
                         { data: 'product_count', name: 'tickets.product_count'},
                         { data: 'product_id', name: 'tickets.product_id'},
                         { data: 'number_of_day', name: 'tickets.number_of_day' },
+                        { data: 'price', name: 'tickets.price' },
                         { data: 'status', name: 'tickets.status'},
                         { data: 'day_off', name: 'day_off'},
                         { data: 'action', name: 'action'}

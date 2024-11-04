@@ -27,6 +27,7 @@ class TicketController extends Controller
                 'tickets.number_of_day',
                 'tickets.status',
                 'tickets.id as id',
+                'tickets.price',
                 'tickets.created_at as created_at'
             );
 
@@ -111,6 +112,7 @@ class TicketController extends Controller
             $data['product_count'] = $data['product_count'];
             $data['number_of_day'] = $data['number_of_day'];
             $data['status'] = $data['status'];
+            $data['price'] = $data['price'];
 
            
             Ticket::create($data);
