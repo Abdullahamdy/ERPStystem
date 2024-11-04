@@ -15,5 +15,6 @@
 "edit_ticket" => "Edit Ticket",
 "active" => "Active",
 "in_active" => "In Active",
+'day_off'=>"Day Off",
 "action" => "",
 ];

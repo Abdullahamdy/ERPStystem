@@ -37,6 +37,7 @@
             				<th>@lang( 'ticket.products' )</th>
             				<th>@lang( 'ticket.number_of_day' )</th>
             				<th>@lang( 'ticket.status' )</th>
+            				<th>@lang('ticket.day_off')</th>
             				<th>@lang( 'ticket.action' )</th>
                          
             			</tr>
@@ -95,10 +96,18 @@
                         { data: 'product_id', name: 'tickets.product_id'},
                         { data: 'number_of_day', name: 'tickets.number_of_day' },
                         { data: 'status', name: 'tickets.status'},
+                        { data: 'day_off', name: 'day_off'},
                         { data: 'action', name: 'action'}
                     
                       
                     ],
+             createdRow: function(row, data, dataIndex) {
+                console.log(data.is_disabled)
+                     if (data.is_disabled == true) {
+                $(row).css('background-color', '#919176')
+                .css('color', '#fffff');
+            }
+        }
                 });
 
             $(document).on('click', 'button.edit_table_button', function(){

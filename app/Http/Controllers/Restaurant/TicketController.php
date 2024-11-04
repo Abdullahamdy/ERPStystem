@@ -26,7 +26,8 @@ class TicketController extends Controller
                 'tickets.product_id',
                 'tickets.number_of_day',
                 'tickets.status',
-                'tickets.id as id'
+                'tickets.id as id',
+                'tickets.created_at as created_at'
             );
 
 
@@ -47,8 +48,24 @@ class TicketController extends Controller
                     return  ' <small class="label bg-green no-print">' . __("ticket.active") . '</small>';
                 }
             })
+            ->addColumn('is_disabled', function ($row) {
+                $createdAt = $row->created_at;
+                $expiryDate = $createdAt->addDays($row->number_of_day);
+                return  now() > $expiryDate;
+                
+            })
+            ->addColumn('day_off', function ($row) {
+                $createdAt = $row->created_at;
+                $expiryDate = $createdAt->addDays($row->number_of_day);
+               if( now() > $expiryDate){
+                   $text =    ' <small class="label bg-red no-print">  منتهيه  </small>';
+               }else{
+                $text = '';
+               }
+                return   $expiryDate->format("d/m/Y") . $text;
+                
+            })
             ->removeColumn('id')
-            ->removeColumn('type_cost')
             ->escapeColumns(['action'])
             ->make(true);
         }
