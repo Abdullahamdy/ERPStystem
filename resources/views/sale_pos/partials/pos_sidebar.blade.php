@@ -4,7 +4,7 @@
     @endif
 </div>
 <div class="row">
-    @if (!empty($categories))
+    {{-- @if (!empty($categories))
 
 
 
@@ -32,7 +32,7 @@
                 @endforeach
             </select>
         </div>
-    @endif
+    @endif --}}
 
     @if (!empty($brands))
         <div class="col-sm-4" id="product_brand_div">
