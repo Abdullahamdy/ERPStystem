@@ -76,7 +76,7 @@
     background-color: #fff;
     border-radius: 2px;
     padding-top: 3px;
-	height:100px
+	height:60px
 ">
 
                     <div class="image-container"

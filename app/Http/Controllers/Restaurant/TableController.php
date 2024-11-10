@@ -18,46 +18,58 @@ class TableController extends Controller
      * @return Response
      */
     public function index()
-    {
-        if (!auth()->user()->can('access_tables')) {
-             abort(403, 'Unauthorized action.');
+{
+    if (!auth()->user()->can('access_tables')) {
+         abort(403, 'Unauthorized action.');
+    }
+
+    if (request()->ajax()) {
+        $business_id = request()->session()->get('user.business_id');
+        
+        $tables = ResTable::where('res_tables.business_id', $business_id)
+                    ->join('business_locations AS BL', 'res_tables.location_id', '=', 'BL.id')
+                    ->select([
+                        'res_tables.name as name', 
+                        'BL.name as location',
+                        'res_tables.description', 
+                        'res_tables.id',
+                        'res_tables.user_id as user_id',
+                        'res_tables.flower_number as flower_number'
+                    ]);
+
+        // Add floor filter
+        if (request()->get('flower_number')) {
+            $tables->where('res_tables.flower_number', request()->get('flower_number'));
         }
 
-        if (request()->ajax()) {
-            $business_id = request()->session()->get('user.business_id');
+        return Datatables::of($tables)
+            ->addColumn(
+                'action',
+                '@role("Admin#' . $business_id . '")
+                <button data-href="{{action(\'Restaurant\TableController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_table_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
+                    &nbsp;
+                @endrole
+                @role("Admin#' . $business_id . '")
+                    <button data-href="{{action(\'Restaurant\TableController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_table_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
+                @endrole'
+            )
+            ->editColumn('user_id', function ($row) {
+                return $row->user ? $row->user->first_name . $row->user->surname  : '' ;
+            })
+            ->editColumn('flower_number', function ($row) {
+                $floors = [
+                    1 => 'الطابق الأول',
+                    2 => 'الطابق الثاني',
+                    3 => 'الطابق الثالث',
+                ];
+                
+                return $floors[$row->flower_number] ?? '';
+            })
+            ->removeColumn('id')
+            ->escapeColumns(['action'])
+            ->make(true);
+    }
 
-            $tables = ResTable::where('res_tables.business_id', $business_id)
-                        ->join('business_locations AS BL', 'res_tables.location_id', '=', 'BL.id')
-                        ->select(['res_tables.name as name', 'BL.name as location',
-                            'res_tables.description', 'res_tables.id','res_tables.user_id as user_id','res_tables.flower_number as flower_number']);
-
-            return Datatables::of($tables)
-                ->addColumn(
-                    'action',
-                    '@role("Admin#' . $business_id . '")
-                    <button data-href="{{action(\'Restaurant\TableController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_table_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
-                        &nbsp;
-                    @endrole
-                    @role("Admin#' . $business_id . '")
-                        <button data-href="{{action(\'Restaurant\TableController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_table_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
-                    @endrole'
-                )
-                ->editColumn('user_id', function ($row) {
-                    return $row->user ? $row->user->first_name . $row->user->surname  : '' ;
-                })
-                ->editColumn('flower_number', function ($row) {
-                    $floors = [
-                        1 => 'الطابق الأول',
-                        2 => 'الطابق الثاني',
-                        3 => 'الطابق الثالث',
-                    ];
-                    
-                    return $floors[$row->flower_number] ?? '';
-                })
-                ->removeColumn('id')
-                ->escapeColumns(['action'])
-                ->make(true);
-        }
 
         return view('restaurant.table.index');
     }

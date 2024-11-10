@@ -14,12 +14,12 @@
 			@endif
 			<button type="button" class="@if($is_mobile) col-xs-6 @endif btn bg-info text-white btn-default btn-flat @if($pos_settings['disable_draft'] != 0) hide @endif" id="pos-draft"><i class="fas fa-edit"></i> @lang('sale.draft')</button>
 			<button type="button" class="btn btn-default bg-yellow btn-flat @if($is_mobile) col-xs-6 @endif" id="pos-quotation"><i class="fas fa-edit"></i> @lang('lang_v1.quotation')</button>
-			<button type="button" class="btn btn-success 
+			<button type="button" class="btn btn-success checkcountqutyticket
 			
 			@if(!$is_mobile) @endif btn-flat no-print 
 			@if($pos_settings['disable_express_checkout'] != 0 || !array_key_exists('cash', $payment_types)) hide 
 			@endif pos-express-finalize
-			 @if($is_mobile) col-xs-6 @endif" data-pay_method="cash" title="@lang('tooltip.express_checkout')" value="send_to_kitchen"> <i class="fas fa-money-bill-alt" aria-hidden="true"></i> 
+			 @if($is_mobile) col-xs-6 @endif" data-pay_method="cash" title="@lang('tooltip.express_checkout')" value="send_to_kitchen"> <i class=" fas fa-money-bill-alt" aria-hidden="true"></i> 
 			 إلي المطبخ</button>
 			@if(empty($pos_settings['disable_suspend']))
 				<button type="button" 

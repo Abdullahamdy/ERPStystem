@@ -478,9 +478,10 @@ $(document).ready(function() {
         });
         var ticketproduct_count = localStorage.getItem('product_count')
         if(ticketproduct_count > total_quantity){
-      
             $('.eq-height-row').css('pointer-events','').css('opacity','')
       
+          }else{
+            
           }
 
 
@@ -614,13 +615,37 @@ $(document).ready(function() {
     });
 
     //Finalize without showing payment options
-    $('button.pos-express-finalize').click(function() {
-       var is_kitchen = $(this).val();
-       pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="0">');
+    $('button.pos-express-finalize').click(function(e) {
 
-       if(is_kitchen == 'send_to_kitchen'){
-        console.log('hie')
-        pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="1">');
+        var total_quantity = 0;
+
+        var price_total = get_subtotal();
+        $('table#pos_table tbody tr').each(function() {
+            total_quantity = total_quantity + __read_number($(this).find('input.pos_quantity'));
+        });
+        var ticketproduct_count = localStorage.getItem('product_count')
+        if( ticketproduct_count && ticketproduct_count !== total_quantity){
+            toastr.error('عدد المنتجات المضافه غير متساويه مع منتجات التذكرة');
+            e.preventDefault();
+            console.log(33);
+        }
+            console.log(43);
+            
+            var is_kitchen = $(this).val();
+            pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="0">');
+            
+            if(is_kitchen == 'send_to_kitchen'){
+                var getticket = localStorage.getItem('product_count')
+                if(getticket >= 1){
+                    localStorage.removeItem('product_count');
+                    $('.eq-height-row').css('pointer-events', 'auto').css('opacity', '1');
+                    
+                }
+                
+                console.log('mytickets' +  getticket);
+                
+                pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="1">');
+            
     }
       
 
@@ -2085,11 +2110,16 @@ function pos_total_row() {
         total_quantity = total_quantity + __read_number($(this).find('input.pos_quantity'));
     });
     var ticketproduct_count = localStorage.getItem('product_count')
-    if(ticketproduct_count == total_quantity){
-      
+    if(ticketproduct_count && ticketproduct_count >=1 && ticketproduct_count == total_quantity){
+        
+        console.log( '1ticketcount' + ticketproduct_count)
        
       $('.eq-height-row').css('pointer-events','none').css('opacity','0.6')
+      $('.checkcountqutyticket').prop('disabled', false);
 
+    }else if (ticketproduct_count){
+        console.log( '3ticketcount' + ticketproduct_count)
+        $('.checkcountqutyticket').prop('disabled', true);
     }
 
     //updating shipping charges
