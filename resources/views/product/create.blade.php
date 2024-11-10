@@ -163,6 +163,15 @@
                         ]) !!}
                     </div>
                 </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        {!! Form::label('printer_id', __('الطابعات') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))
+                        {!! Form::select('printer_id', $printers, [], [
+                            'class' => 'form-control select2',
+                            'id' => 'printer_id',
+                        ]) !!}
+                    </div>
+                </div>
                 <div class="clearfix"></div>
 
                 <div class="col-sm-4">

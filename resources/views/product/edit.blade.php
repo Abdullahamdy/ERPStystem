@@ -111,6 +111,12 @@
                   {!! Form::select('product_locations[]', $business_locations, $product->product_locations->pluck('id'), ['class' => 'form-control select2', 'multiple', 'id' => 'product_locations']); !!}
               </div>
             </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                {!! Form::label('printer_id', __('الطابعات') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))
+                  {!! Form::select('printer_id', $printers, $product->printer_id, ['class' => 'form-control', 'id' => 'printer_id']); !!}
+              </div>
+            </div>
 
             <div class="clearfix"></div>
             

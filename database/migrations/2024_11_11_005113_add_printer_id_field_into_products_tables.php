@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddFolowreNumberFieldIntoResTables extends Migration
+class AddPrinterIdFieldIntoProductsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFolowreNumberFieldIntoResTables extends Migration
      */
     public function up()
     {
-        Schema::table('res_tables', function (Blueprint $table) {
-            $table->tinyInteger('flower_number')->nullable();
+        Schema::table('products', function (Blueprint $table) {
+            $table->bigInteger('printer_id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddFolowreNumberFieldIntoResTables extends Migration
      */
     public function down()
     {
-        Schema::table('res_tables', function (Blueprint $table) {
-            $table->dropColumn('flower_number');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('printer_id');
         });
     }
 }

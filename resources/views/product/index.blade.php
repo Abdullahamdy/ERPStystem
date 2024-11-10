@@ -200,6 +200,7 @@
                         { data: 'image', name: 'products.image'  },
                         { data: 'action', name: 'action'},
                         { data: 'product', name: 'products.name'  },
+                        { data: 'printer_id', name: 'products.printer_id'  },
                         // { data: 'store_id', name: 'products.store_id'  },
                         { data: 'product_locations', name: 'product_locations'  },
                         @can('view_purchase_price')

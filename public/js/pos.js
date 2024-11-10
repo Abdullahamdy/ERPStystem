@@ -623,14 +623,6 @@ $(document).ready(function() {
         $('table#pos_table tbody tr').each(function() {
             total_quantity = total_quantity + __read_number($(this).find('input.pos_quantity'));
         });
-        var ticketproduct_count = localStorage.getItem('product_count')
-        if( ticketproduct_count && ticketproduct_count !== total_quantity){
-            toastr.error('عدد المنتجات المضافه غير متساويه مع منتجات التذكرة');
-            e.preventDefault();
-            console.log(33);
-        }
-            console.log(43);
-            
             var is_kitchen = $(this).val();
             pos_form_obj.append('<input type="hidden" id="kitchen_send_to" name="kitchen_send_to" value="0">');
             

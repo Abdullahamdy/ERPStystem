@@ -223,4 +223,8 @@ class Product extends Model
     public function store(){
         return $this->belongsTo(Stores::class,'store_id');
     }
+
+    public function printer(){
+        return $this->belongsTo(Printer::class,'printer_id');
+    }
 }

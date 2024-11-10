@@ -6,7 +6,9 @@ use App\Brands;
 use App\Business;
 use App\BusinessLocation;
 use App\Category;
+use App\Exports\ProductsExport;
 use App\Media;
+use App\Printer;
 use App\Product;
 use App\ProductVariation;
 use App\PurchaseLine;
@@ -20,12 +22,11 @@ use App\VariationGroupPrice;
 use App\VariationLocationDetails;
 use App\VariationTemplate;
 use App\Warranty;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Exports\ProductsExport;
-use Excel;
 
 class ProductController extends Controller
 {
@@ -113,6 +114,7 @@ class ProductController extends Controller
                 'products.name as product',
                 'products.store_id as store_id',     
                 'products.type',
+                'products.printer_id as printer_id',
                 'c1.name as category',
                 'c2.name as sub_category',
                 'units.actual_name as unit',
@@ -269,6 +271,9 @@ class ProductController extends Controller
                 ->editColumn('image', function ($row) {
                     return '<div style="display: flex;"><img src="' . $row->image_url . '" alt="Product image" class="product-thumbnail-small"></div>';
                 })
+                ->editColumn('printer_id', function ($row) {
+                    return $row->printer ? $row->printer->name : '';
+                })
                 ->editColumn('type', '@lang("lang_v1." . $type)')
                 ->addColumn('mass_delete', function ($row) {
                     return  '<input type="checkbox" class="row-select" value="' . $row->id . '">';
@@ -375,6 +380,7 @@ class ProductController extends Controller
         $categories = Category::forDropdown($business_id, 'product');
 
         $brands = Brands::forDropdown($business_id);
+        $printers = Printer::forDropdown($business_id);
         $units = Unit::forDropdown($business_id, true);
 
         $tax_dropdown = TaxRate::forBusinessDropdown($business_id, true, true);
@@ -423,7 +429,7 @@ class ProductController extends Controller
         $pos_module_data = $this->moduleUtil->getModuleData('get_product_screen_top_view');
 
         return view('product.create')
-            ->with(compact('categories', 'brands', 'units', 'taxes', 'barcode_types', 'default_profit_percent', 'tax_attributes', 'barcode_default', 'business_locations', 'duplicate_product', 'sub_categories', 'rack_details', 'selling_price_group_count', 'module_form_parts', 'product_types', 'common_settings', 'warranties', 'pos_module_data'));
+            ->with(compact('categories', 'brands', 'printers','units', 'taxes', 'barcode_types', 'default_profit_percent', 'tax_attributes', 'barcode_default', 'business_locations', 'duplicate_product', 'sub_categories', 'rack_details', 'selling_price_group_count', 'module_form_parts', 'product_types', 'common_settings', 'warranties', 'pos_module_data'));
     }
 
     private function product_types()
@@ -495,9 +501,9 @@ class ProductController extends Controller
             $common_settings = session()->get('business.common_settings');
 
             $product_details['warranty_id'] = !empty($request->input('warranty_id')) ? $request->input('warranty_id') : null;
+            $product_details['printer_id'] = !empty($request->input('printer_id')) ? $request->input('printer_id') : null;
 
             DB::beginTransaction();
-
             $product = Product::create($product_details);
 
             if (empty(trim($request->input('sku')))) {
@@ -620,6 +626,7 @@ class ProductController extends Controller
         $business_id = request()->session()->get('user.business_id');
         $categories = Category::forDropdown($business_id, 'product');
         $brands = Brands::forDropdown($business_id);
+        $printers = Printer::forDropdown($business_id);
         $tax_dropdown = TaxRate::forBusinessDropdown($business_id, true, true);
         $taxes = $tax_dropdown['tax_rates'];
         $tax_attributes = $tax_dropdown['attributes'];
@@ -662,7 +669,7 @@ class ProductController extends Controller
         $alert_quantity = !is_null($product->alert_quantity) ? $this->productUtil->num_f($product->alert_quantity, false, null, true) : null;
 
         return view('product.edit')
-            ->with(compact('categories', 'brands', 'units', 'sub_units', 'taxes', 'tax_attributes', 'barcode_types', 'product', 'sub_categories', 'default_profit_percent', 'business_locations', 'rack_details', 'selling_price_group_count', 'module_form_parts', 'product_types', 'common_settings', 'warranties', 'pos_module_data', 'alert_quantity'));
+            ->with(compact('categories', 'brands', 'printers','units', 'sub_units', 'taxes', 'tax_attributes', 'barcode_types', 'product', 'sub_categories', 'default_profit_percent', 'business_locations', 'rack_details', 'selling_price_group_count', 'module_form_parts', 'product_types', 'common_settings', 'warranties', 'pos_module_data', 'alert_quantity'));
     }
 
     /**
