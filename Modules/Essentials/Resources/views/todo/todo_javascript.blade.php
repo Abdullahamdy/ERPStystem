@@ -57,9 +57,15 @@
             $('#recipient').select2('destroy');
         });
     });
+    $('.removeticketfromstorage').on('click',function(){
+        console.log(453);
+        localStorage.removeItem('product_count');
+        $('.eq-height-row').css('pointer-events', 'auto').css('opacity', '1');
+    })
 
     function handleRecipientChange(selectedValue) {
         if (selectedValue != "") {
+            $('.removeticketfromstorage').attr('disabled',false)
             $.ajax({
                 method: 'GET',
                 url: "{{ url('modules/tickets/:id') }}".replace(':id', selectedValue),

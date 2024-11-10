@@ -195,7 +195,7 @@
             </div>
         </div>
         <!-- Modal Structure -->
-        <div class="modal  fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal  fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -209,18 +209,19 @@
                             <label for="recipient-name" class="col-form-label">Recipient:</label>
                             @inject('ticketModel', '\App\Ticket');
                             @php
-                            $tickets = $ticketModel->where('status', 1)->get();
-                        @endphp
-                        
-                        <select class="select2 form-control" name="recipient" id="recipient" 
-                        onchange="handleRecipientChange(this.value)">
-                            <option value="">Select Ticket</option>
-                            @forelse ($tickets as $ticket)
-                            <option value="{{ $ticket->id }}">{{ $ticket->name ?? 'Ticket #' . $ticket->ticket_number }}</option>
-                            @empty
-                                <option disabled>No data available</option>
-                            @endforelse
-                        </select>
+                                $tickets = $ticketModel->where('status', 1)->get();
+                            @endphp
+
+                            <select class="select2 form-control" name="recipient" id="recipient"
+                                onchange="handleRecipientChange(this.value)">
+                                <option value="">Select Ticket</option>
+                                @forelse ($tickets as $ticket)
+                                    <option value="{{ $ticket->id }}">
+                                        {{ $ticket->name ?? 'Ticket #' . $ticket->ticket_number }}</option>
+                                @empty
+                                    <option disabled>No data available</option>
+                                @endforelse
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -231,9 +232,11 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-primary opentticketmodal" data-toggle="modal" data-target="#exampleModal">
             التذاكر
         </button>
+        <button type="button" class="btn btn-danger removeticketfromstorage" disabled="disabled">
+            إلغاء التذكرة </button>
         <div class="modal fade types_of_service_modal" tabindex="-1" role="dialog"
             aria-labelledby="gridSystemModalLabel"></div>
     @endif

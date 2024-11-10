@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    var ticketproduct_count = localStorage.getItem('product_count')
+    if(ticketproduct_count){
+        $('.removeticketfromstorage').attr('disabled',false)
+    
+
+    }
     customer_set = false;
     //Prevent enter key function except texarea
     $('form').on('keyup keypress', function(e) {
