@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="{{ asset('css/vendor.css?v='.$asset_v) }}">
-
+{{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
+{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"> --}}
 @if( in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) )
 	<link rel="stylesheet" href="{{ asset('css/rtl.css?v='.$asset_v) }}">
 @endif
 
 @yield('css')
 
-<!-- app css -->
+<!-- app css  1-->
 <link rel="stylesheet" href="{{ asset('css/app.css?v='.$asset_v) }}">
 
 @if(isset($pos_layout) && $pos_layout)

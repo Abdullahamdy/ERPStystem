@@ -33,7 +33,7 @@
 		@else
 			{!! $product_name !!}
 		@endif
-		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}">		
+		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}" class="43">		
 
 		<input type="hidden" 
 			class="product_type" 

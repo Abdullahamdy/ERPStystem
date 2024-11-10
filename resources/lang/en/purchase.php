@@ -33,6 +33,8 @@ return [
     'all_purchases' => 'All Purchases',
     'purchase_status' => 'Purchase Status',
     'payment_status' => 'Payment Status',
+    "user" => "user",
+    'flowersNumber' => 'Flowers Number',
     'grand_total' => 'Grand Total',
     'add_purchase' => 'Add Purchase',
     'purchase_date' => 'Purchase Date',

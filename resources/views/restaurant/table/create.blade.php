@@ -28,6 +28,14 @@
       </div>
 
       <div class="form-group">
+        {!! Form::label('user_id', __('purchase.user').':*') !!}
+        {!! Form::select('user_id', $users, [], ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required']); !!}
+      </div>
+      <div class="form-group">
+        {!! Form::label('flower_number', __('purchase.flowersNumber').':*') !!}
+        {!! Form::select('flower_number', $followres, [], ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required']) !!}
+      </div>
+      <div class="form-group">
         {!! Form::label('description', __( 'restaurant.short_description' ) . ':') !!}
           {!! Form::text('description', null, ['class' => 'form-control','placeholder' => __( 'restaurant.short_description' )]); !!}
       </div>

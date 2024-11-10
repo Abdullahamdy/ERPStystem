@@ -9,6 +9,7 @@ use Datatables;
 
 use App\Restaurant\ResTable;
 use App\BusinessLocation;
+use App\User;
 
 class TableController extends Controller
 {
@@ -28,7 +29,7 @@ class TableController extends Controller
             $tables = ResTable::where('res_tables.business_id', $business_id)
                         ->join('business_locations AS BL', 'res_tables.location_id', '=', 'BL.id')
                         ->select(['res_tables.name as name', 'BL.name as location',
-                            'res_tables.description', 'res_tables.id']);
+                            'res_tables.description', 'res_tables.id','res_tables.user_id as user_id','res_tables.flower_number as flower_number']);
 
             return Datatables::of($tables)
                 ->addColumn(
@@ -41,6 +42,18 @@ class TableController extends Controller
                         <button data-href="{{action(\'Restaurant\TableController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_table_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
                     @endrole'
                 )
+                ->editColumn('user_id', function ($row) {
+                    return $row->user ? $row->user->first_name . $row->user->surname  : '' ;
+                })
+                ->editColumn('flower_number', function ($row) {
+                    $floors = [
+                        1 => 'الطابق الأول',
+                        2 => 'الطابق الثاني',
+                        3 => 'الطابق الثالث',
+                    ];
+                    
+                    return $floors[$row->flower_number] ?? '';
+                })
                 ->removeColumn('id')
                 ->escapeColumns(['action'])
                 ->make(true);
@@ -58,12 +71,18 @@ class TableController extends Controller
         if (!auth()->user()->can('access_tables')) {
              abort(403, 'Unauthorized action.');
         }
-
+        $followres = [
+            1 => 'الطابق الأول',
+            2 => 'الطابق الثاني',
+            3 => 'الطابق الثالث',
+        ];
         $business_id = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id);
+        $business_id = request()->session()->get('user.business_id');
+        $users = User::forDropdown($business_id, false);
 
         return view('restaurant.table.create')
-            ->with(compact('business_locations'));
+            ->with(compact('business_locations','users','followres'));
     }
 
     /**
@@ -73,12 +92,12 @@ class TableController extends Controller
      */
     public function store(Request $request)
     {
+       
         if (!auth()->user()->can('access_tables')) {
              abort(403, 'Unauthorized action.');
         }
-
         try {
-            $input = $request->only(['name', 'description', 'location_id']);
+            $input = $request->only(['name', 'description', 'location_id','user_id','flower_number']);
             $business_id = $request->session()->get('user.business_id');
             $input['business_id'] = $business_id;
             $input['created_by'] = $request->session()->get('user.id');
@@ -90,7 +109,7 @@ class TableController extends Controller
                         ];
         } catch (\Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
-            
+         
             $output = ['success' => false,
                             'msg' => __("messages.something_went_wrong")
                         ];
@@ -124,10 +143,16 @@ class TableController extends Controller
         
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
+            $users = User::forDropdown($business_id, false);
+            $followres = [
+                1 => 'الطابق الأول',
+                2 => 'الطابق الثاني',
+                3 => 'الطابق الثالث',
+            ];
             $table = ResTable::where('business_id', $business_id)->find($id);
 
             return view('restaurant.table.edit')
-                ->with(compact('table'));
+                ->with(compact('table','users','followres'));
         }
     }
 
@@ -144,18 +169,22 @@ class TableController extends Controller
 
         if (request()->ajax()) {
             try {
-                $input = $request->only(['name', 'description']);
+                $input = $request->only(['name', 'description','user_id','flower_number']);
                 $business_id = $request->session()->get('user.business_id');
 
                 $table = ResTable::where('business_id', $business_id)->findOrFail($id);
                 $table->name = $input['name'];
+
                 $table->description = $input['description'];
+                $table->user_id = $input['user_id'];
+                $table->flower_number = $input['flower_number'];
                 $table->save();
 
                 $output = ['success' => true,
                             'msg' => __("lang_v1.updated_success")
                             ];
             } catch (\Exception $e) {
+                dd($e);
                 \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
                 $output = ['success' => false,

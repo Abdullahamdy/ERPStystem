@@ -12,6 +12,8 @@
 "payment_updated_success" => "تم تحديث القسط",
 "payment_deleted_success" => "تم حذف القسط بنجاح",
 "amount" => "القيمة",
+"user" => "المستخدم",
+'flowersNumber'=>'اختر الطابق',
 "payment_method" => "طريقة الدفع",
 "no_records_found" => "لا يوجد سجل",
 "payment_due" => "دفع مستحق",

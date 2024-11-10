@@ -1,4 +1,4 @@
-<!-- app css -->
+<!-- app css 2-->
 @if(!empty($for_pdf))
 	<link rel="stylesheet" href="{{ asset('css/app.css?v='.$asset_v) }}">
 @endif

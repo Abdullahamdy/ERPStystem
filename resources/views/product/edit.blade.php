@@ -137,7 +137,7 @@
               </div>
             </div>
             @endif
-            <!-- include module fields -->
+            <!-- include module fields 2 -->
             @if(!empty($pos_module_data))
                 @foreach($pos_module_data as $key => $value)
                     @if(!empty($value['view_path']))

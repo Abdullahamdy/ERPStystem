@@ -15,7 +15,9 @@ class TicketController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    
     {
+        
        
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
@@ -114,7 +116,6 @@ class TicketController extends Controller
             $data['status'] = $data['status'];
             $data['price'] = $data['price'];
 
-           
             Ticket::create($data);
 
             $output = [
@@ -140,7 +141,13 @@ class TicketController extends Controller
      */
     public function show($id)
     {
-        //
+        $ticket = Ticket::find($id);
+        if(!$ticket){
+
+            return response()->json(['status'=>false,'msg'=>'ticket not found or not selected ticket']);
+        }
+        return response()->json(['success'=>true,'product_count'=>$ticket->product_count]);
+
     }
 
     /**

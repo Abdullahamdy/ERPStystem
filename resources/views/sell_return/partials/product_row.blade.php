@@ -4,7 +4,7 @@
 		<br/>
 		{{$product->sub_sku}}@if(!empty($product->brand)), {{$product->brand}} @endif
 		&nbsp;
-		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}">
+		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}" >
 		<i class="fa fa-commenting cursor-pointer text-primary add-pos-row-description" title="@lang('lang_v1.add_description')" data-toggle="modal" data-target="#row_description_modal_{{$row_count}}"></i>
 	</td>
 	<td>

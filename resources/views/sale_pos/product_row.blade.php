@@ -11,7 +11,7 @@
 	@endif
 @endforeach
 
-<tr class="product_row" data-row_index="{{$row_count}}" @if(!empty($so_line)) data-so_id="{{$so_line->transaction_id}}" @endif>
+<tr class="product_row productrowid" data-row_index="{{$row_count}}" @if(!empty($so_line)) data-so_id="{{$so_line->transaction_id}}" @endif>
 	<td>
 		@if(!empty($so_line))
 			<input type="hidden" 
@@ -33,16 +33,17 @@
 		@else
 			{!! $product_name !!}
 		@endif
-		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}">		
-
+		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}" >		
+		
 		<input type="hidden" 
-			class="product_type" 
-			name="products[{{$row_count}}][product_type]" 
-			value="{{$product->product_type}}">
-				<input type="hidden" 
-			class="product_type" 
-			name="products[{{$row_count}}][product_cat]" 
-			value="{{$product->category_id}}">
+		class="product_type" 
+		name="products[{{$row_count}}][product_type]" 
+		value="{{$product->product_type}}">
+		<input type="hidden" 
+		class="product_type" 
+		name="products[{{$row_count}}][product_cat]" 
+		value="{{$product->category_id}}">
+		
 
 		@php
 			$hide_tax = 'hide';
@@ -275,6 +276,7 @@
 		<input type="hidden" class="base_unit_multiplier" name="products[{{$row_count}}][base_unit_multiplier]" value="{{$multiplier}}">
 
 		<input type="hidden" class="hidden_base_unit_sell_price" value="{{$product->default_sell_price / $multiplier}}">
+		<input type="hidden" class="product_id_ticket" value="{{$product['product_id']}}">
 		
 		{{-- Hidden fields for combo products --}}
 		@if($product->product_type == 'combo'&& !empty($product->combo_products))
@@ -292,6 +294,7 @@
 						$qty_total = $combo_product['qty_required'];
 					@endphp
 				@endif
+				
 
 				<input type="hidden" 
 					name="products[{{$row_count}}][combo][{{$k}}][product_id]"

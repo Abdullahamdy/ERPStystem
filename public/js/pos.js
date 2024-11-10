@@ -464,14 +464,32 @@ $(document).ready(function() {
 
     //Remove row on click on remove row
     $('table#pos_table tbody').on('click', 'i.pos_remove_row', function() {
+
+    
+        var total_quantity = 0;
+  
         $(this)
             .parents('tr')
             .remove();
         pos_total_row();
+
+        $('table#pos_table tbody tr').each(function() {
+            total_quantity = total_quantity + __read_number($(this).find('input.pos_quantity'));
+        });
+        var ticketproduct_count = localStorage.getItem('product_count')
+        if(ticketproduct_count > total_quantity){
+      
+            $('.eq-height-row').css('pointer-events','').css('opacity','')
+      
+          }
+
+
+
     });
 
     //Cancel the invoice
     $('button#pos-cancel').click(function() {
+        console.log(4665)
         swal({
             title: LANG.sure,
             icon: 'warning',
@@ -486,6 +504,7 @@ $(document).ready(function() {
 
     //Save invoice as draft
     $('button#pos-draft').click(function() {
+        console.log(4665)
         //Check if product is present or not.
         if ($('table#pos_table tbody').find('.product_row').length <= 0) {
             toastr.warning(LANG.no_products_added);
@@ -1465,6 +1484,7 @@ const amiriFont = "AAEAAAAPAIAAAwBwR0RFRn79k34AAAHoAAACAEdQT1NFvGBPAAFeHAAA2oBHU
         device_model_id
     );
     $('select#product_category, select#product_brand, select#select_location_id').on('change', function(e) {
+        console.log(5646);
         $('input#suggestion_page').val(1);
         var location_id = $('input#location_id').val();
         if (location_id != '' || location_id != undefined) {
@@ -1792,11 +1812,43 @@ function get_product_suggestion_list(category_id, brand_id, location_id, url = n
         },
         dataType: 'html',
         success: function(result) {
+
+            console.log(4665)
             $('div#product_list_body').append(result);
             $('#suggestion_page_loader').fadeOut(700);
         },
     });
 }
+
+
+///handle data in dev
+
+$('div.product_category_box').on('click',function(){
+    is_enabled_stock = null,
+     repair_model_id = null
+    $.ajax({
+        method: 'GET',
+        url: '/sells/pos/get-product-suggestion',
+        data: {
+            category_id: $(this).attr('data-variation_id'),
+            brand_id: null,
+            location_id: $('#location_id').val(),
+            page: $('input#suggestion_page').val(),
+            is_enabled_stock: is_enabled_stock,
+            repair_model_id: repair_model_id
+        },
+        dataType: 'html',
+        success: function(result) {
+           var page =  $('input#suggestion_page').val();
+            if (page == 1) {
+                $('div#product_list_body').html('');
+            }
+            console.log(4665)
+            $('div#product_list_body').append(result);
+            $('#suggestion_page_loader').fadeOut(700);
+        },
+    });
+})
 
 //Get recent transactions
 function get_recent_transactions(status, element_obj) {
@@ -1810,11 +1862,22 @@ function get_recent_transactions(status, element_obj) {
         data: { status: status , transaction_sub_type: transaction_sub_type},
         dataType: 'html',
         success: function(result) {
+            console.log(4665)
             element_obj.html(result);
             __currency_convert_recursively(element_obj);
         },
     });
 }
+$('.updateticket').on('click', function() {
+    var values = [];
+    
+    $('.product_id_ticket').each(function() {
+        values.push($(this).val()); 
+    });
+
+    console.log(values); 
+});
+
 
 //variation_id is null when weighing_scale_barcode is used.
 function pos_product_row(variation_id = null, purchase_line_id = null, weighing_scale_barcode = null, quantity = 1) {
@@ -1872,6 +1935,7 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
     }
 
     if (add_via_ajax) {
+        'added'
         var product_row = $('input#product_row_count').val();
         var location_id = $('input#location_id').val();
         var customer_id = $('select#customer_id').val();
@@ -1925,6 +1989,8 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
             },
             dataType: 'json',
             success: function(result) {
+                var selectedValue = localStorage.getItem('product_count')
+                console.log('selected value ' +selectedValue)
                 if (result.success) {
                     $('table#pos_table tbody')
                         .append(result.html_content)
@@ -1935,6 +2001,7 @@ function pos_product_row(variation_id = null, purchase_line_id = null, weighing_
                         .find('tr')
                         .last();
                     pos_each_row(this_row);
+                    console.log($('.pos_quantity ').val())
 
                     //For initial discount if present
                     var line_total = __read_number(this_row.find('input.pos_line_total'));
@@ -2012,10 +2079,18 @@ function pos_each_row(row_obj) {
 
 function pos_total_row() {
     var total_quantity = 0;
+
     var price_total = get_subtotal();
     $('table#pos_table tbody tr').each(function() {
         total_quantity = total_quantity + __read_number($(this).find('input.pos_quantity'));
     });
+    var ticketproduct_count = localStorage.getItem('product_count')
+    if(ticketproduct_count == total_quantity){
+      
+       
+      $('.eq-height-row').css('pointer-events','none').css('opacity','0.6')
+
+    }
 
     //updating shipping charges
     $('span#shipping_charges_amount').text(
@@ -2389,6 +2464,7 @@ function initialize_printer() {
 }
 
 $('body').on('click', 'label', function(e) {
+    console.log(342);
     var field_id = $(this).attr('for');
     if (field_id) {
         if ($('#' + field_id).hasClass('select2')) {
@@ -2533,6 +2609,7 @@ $(document).on('shown.bs.modal', '#recurringInvoiceModal', function() {
 });
 
 $(document).on('click', '#select_all_service_staff', function() {
+    console.log(4665)
     var val = $('#res_waiter_id').val();
     $('#pos_table tbody')
         .find('select.order_line_service_staff')
@@ -2544,6 +2621,7 @@ $(document).on('click', '#select_all_service_staff', function() {
 });
 
 $(document).on('click', '.print-invoice-link', function(e) {
+    console.log(4665)
     e.preventDefault();
     $.ajax({
         url: $(this).attr('href') + "?check_location=true",
@@ -2753,6 +2831,7 @@ $(document).on('change', 'input#packing_charge, #additional_expense_value_1, #ad
 });
 
 $(document).on('click', '.service_modal_btn', function(e) {
+    console.log(4665)
     if ($('#types_of_service_id').val()) {
         $('.types_of_service_modal').modal('show');
     }

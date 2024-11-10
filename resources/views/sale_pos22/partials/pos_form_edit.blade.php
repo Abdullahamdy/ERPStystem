@@ -155,7 +155,6 @@
 		</div>
 	@endif
 </div>
-<!-- include module fields -->
 @if(!empty($pos_module_data))
     @foreach($pos_module_data as $key => $value)
         @if(!empty($value['view_path']))

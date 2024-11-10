@@ -36,6 +36,8 @@
             			<tr>
             				<th>@lang( 'restaurant.table' )</th>
                             <th>@lang( 'purchase.business_location' )</th>
+                            <th>@lang( 'purchase.user' )</th>
+                            <th>@lang( 'purchase.flowersNumber' )</th>
             				<th>@lang( 'restaurant.description' )</th>
             				<th>@lang( 'messages.action' )</th>
             			</tr>
@@ -92,6 +94,8 @@
                     columns: [
                         { data: 'name', name: 'res_tables.name'  },
                         { data: 'location', name: 'BL.name'},
+                        { data: 'user_id', name: 'user_id'},
+                        { data: 'flower_number', name: 'flower_number'},
                         { data: 'description', name: 'description'},
                         { data: 'action', name: 'action'}
                     ],
