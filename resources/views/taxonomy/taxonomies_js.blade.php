@@ -24,7 +24,6 @@
                     serverSide: true,
                     ajax: '/taxonomies?type=' + category_type,
                     columns: [
-                        { data: 'image', name: 'image' },
                         { data: 'name', name: 'name' },
                         @if($cat_code_enabled)
                             { data: 'short_code', name: 'short_code' },

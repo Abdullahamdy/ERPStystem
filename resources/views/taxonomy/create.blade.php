@@ -30,7 +30,7 @@
 
     <!-- Image Upload -->
    <!-- Image Upload -->
-<div class="form-group">
+{{-- <div class="form-group">
   {!! Form::label('image', __('lang_v1.product_image') . ':') !!}
   <div class="input-group">
       <span class="input-group-btn">
@@ -53,7 +53,7 @@
           @lang('lang_v1.aspect_ratio_should_be_1_1')
       </p>
   </small>
-</div>
+</div> --}}
       @if($cat_code_enabled)
       <div class="form-group">
         {!! Form::label('short_code', $cat_code_label . ':') !!}
@@ -91,7 +91,7 @@
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 
-<script>
+{{-- <script>
   function previewImage(event) {
       const input = event.target;
       const previewImage = document.getElementById('preview_image');
@@ -104,4 +104,4 @@
           previewImage.style.display = 'none';
       }
   }
-</script>
+</script> --}}
