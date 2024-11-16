@@ -14,7 +14,7 @@ class ChangePrinterIdToBeNullableInProductss extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->bigInteger('printer_id')->nullable()->change();
+            $table->unsignedBigInteger('printer_id')->nullable()->change();
         });
     }
 
@@ -26,7 +26,7 @@ class ChangePrinterIdToBeNullableInProductss extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->bigInteger('printer_id')->nullable(false)->change();
+            $table->unsignedBigInteger('printer_id')->nullable(false)->change();
 
         });
     }
