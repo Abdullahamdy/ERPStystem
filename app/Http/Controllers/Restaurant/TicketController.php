@@ -22,7 +22,7 @@ class TicketController extends Controller
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
 
-            $tables = Ticket::select(
+            $tables = Ticket::where('status',true)->select(
                 'tickets.product_count',
                 'tickets.ticket_number',
                 'tickets.product_id',
@@ -75,6 +75,14 @@ class TicketController extends Controller
 
 
         return view('ticket.table.index');
+    }
+
+    public function updateStatus(Request $request){
+        if($request->id){
+          $ticket =  Ticket::find($request->id);
+          $ticket->update(['status'=>false]);
+          return response()->json(['status'=>true,'msg'=>'تم التأكيد بنجاح'],200);
+        }
     }
 
     /**

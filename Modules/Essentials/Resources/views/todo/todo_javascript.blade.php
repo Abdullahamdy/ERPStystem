@@ -58,7 +58,7 @@
         });
     });
     $('.removeticketfromstorage').on('click',function(){
-        console.log(453);
+        $('.removeticketfromstorage').attr('disabled',false)
         localStorage.removeItem('product_count');
         $('.eq-height-row').css('pointer-events', 'auto').css('opacity', '1');
     })

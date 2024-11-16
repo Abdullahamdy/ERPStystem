@@ -1892,13 +1892,47 @@ function get_recent_transactions(status, element_obj) {
     });
 }
 $('.updateticket').on('click', function() {
-    var values = [];
+ slectedval =  $('#recipient').val()
+ if(slectedval != ''){
+    let selectedVal = $('#recipient').val();
+    $('#recipient option[value="' + selectedVal + '"]').remove();
+    $('#recipient').val('').trigger('change');
     
-    $('.product_id_ticket').each(function() {
-        values.push($(this).val()); 
-    });
+     $.ajax({
+         method: 'POST',
+         url: '/update-ticket',
+         data: { 
+             id: slectedval
+            },
+            dataType: 'json',
+            success: function(result) {
+                toastr.success(result.msg);
+                $('#TicketModal').modal('hide');            },
+        });
+    }else{
+        toastr.warning('من فضلك اختر اولا');
+        $('#TicketModal').modal('hide');  
+    }
+    
+  
+});
+$('#TicketModal').on('shown.bs.modal', function () {
+    $('.select2').select2({
+        dropdownParent: $('#TicketModal'),
+        width: '100%',
+        placeholder: 'Search ticket...',
+        allowClear: true,
 
-    console.log(values); 
+        minimumResultsForSearch: 0,  
+        language: {
+            noResults: function() {
+                return "No results found";
+            },
+            searching: function() {
+                return "Searching...";
+            }
+        }
+    });
 });
 
 

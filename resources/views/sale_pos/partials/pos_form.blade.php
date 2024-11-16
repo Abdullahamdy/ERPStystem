@@ -195,16 +195,16 @@
             </div>
         </div>
         <!-- Modal Structure -->
-        <div class="modal  fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal  fade" id="TicketModal" aria-labelledby="TicketModalLabel"  role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Select2 in Bootstrap Modal</h5>
+                        <h5 class="modal-title" id="TicketModalLabel">Select2 in Bootstrap Modal</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="max-height: 800px">
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Recipient:</label>
                             @inject('ticketModel', '\App\Ticket');
@@ -213,6 +213,7 @@
                             @endphp
 
                             <select class="select2 form-control" name="recipient" id="recipient"
+                            width="500"
                                 onchange="handleRecipientChange(this.value)">
                                 <option value="">Select Ticket</option>
                                 @forelse ($tickets as $ticket)
@@ -232,7 +233,7 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-primary opentticketmodal" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-primary opentticketmodal" data-toggle="modal" data-target="#TicketModal">
             التذاكر
         </button>
         <button type="button" class="btn btn-danger removeticketfromstorage" disabled="disabled">

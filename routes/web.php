@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Restaurant\TicketController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -147,6 +150,8 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/revert-sale-import/{batch}', 'ImportSalesController@revertSaleImport');
 
     Route::get('/sells/pos/get_product_row/{variation_id}/{location_id}', 'SellPosController@getProductRow');
+    Route::post('/update-ticket', [TicketController::class,'updateStatus']);
+   
     Route::post('/sells/pos/get_payment_row', 'SellPosController@getPaymentRow');
     Route::post('/sells/pos/get-reward-details', 'SellPosController@getRewardDetails');
     Route::get('/sells/pos/get-recent-transactions', 'SellPosController@getRecentTransactions');
@@ -359,6 +364,10 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
 
         Route::get('/kitchen', 'Restaurant\KitchenController@index');
         Route::resource('/tickets', 'Restaurant\TicketController');
+        
+
+      
+      
         Route::get('/kitchen/mark-as-cooked/{id}', 'Restaurant\KitchenController@markAsCooked');
         Route::post('/refresh-orders-list', 'Restaurant\KitchenController@refreshOrdersList');
         Route::post('/refresh-line-orders-list', 'Restaurant\KitchenController@refreshLineOrdersList');
