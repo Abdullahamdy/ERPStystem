@@ -564,6 +564,7 @@ class ProductController extends Controller
                 'msg' => __('product.product_added_success')
             ];
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
 
