@@ -1158,7 +1158,7 @@ class ProductUtil extends Util
      *
      * @return array
      */
-    public function createOrUpdatePurchaseLines($transaction, $input_data, $currency_details, $enable_product_editing, $before_status = null)
+    public function createOrUpdatePurchaseLines($transaction, $input_data, $currency_details, $enable_product_editing, $before_status = null,$store_id = null)
     {
         $updated_purchase_lines = [];
         $updated_purchase_line_ids = [0];
@@ -1209,6 +1209,7 @@ class ProductUtil extends Util
             $purchase_line->exp_date = !empty($data['exp_date']) ? $this->uf_date($data['exp_date']) : null;
             $purchase_line->sub_unit_id = !empty($data['sub_unit_id']) ? $data['sub_unit_id'] : null;
             $purchase_line->purchase_order_line_id = !empty($data['purchase_order_line_id']) ? $data['purchase_order_line_id'] : null;
+            $purchase_line->store_id = $store_id;
 
             if (!empty($data['secondary_unit_quantity'])) {
                 $purchase_line->secondary_unit_quantity = $this->num_uf($data['secondary_unit_quantity']);

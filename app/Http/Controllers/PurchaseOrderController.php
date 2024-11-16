@@ -335,6 +335,7 @@ class PurchaseOrderController extends Controller
                 'transaction_date' => 'required',
                 'total_before_tax' => 'required',
                 'location_id' => 'required',
+                'store_id' => 'required',
                 'final_total' => 'required',
                 'document' => 'file|max:'. (config('constants.document_size_limit') / 1000)
             ]);
@@ -407,7 +408,7 @@ class PurchaseOrderController extends Controller
             $purchase_lines = [];
             $purchases = $request->input('purchases');
 
-            $this->productUtil->createOrUpdatePurchaseLines($transaction, $purchases, $currency_details, $enable_product_editing);
+            $this->productUtil->createOrUpdatePurchaseLines($transaction, $purchases, $currency_details, $enable_product_editing,null,$request->store_id);
 
             $this->transactionUtil->activityLog($transaction, 'added');
             
@@ -417,6 +418,7 @@ class PurchaseOrderController extends Controller
                             'msg' => __('lang_v1.added_success')
                         ];
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             

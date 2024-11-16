@@ -283,7 +283,7 @@ class TransactionUtil extends Util
      *
      * @return boolean/object
      */
-    public function createOrUpdateSellLines($transaction, $products, $location_id, $return_deleted = false, $status_before = null, $extra_line_parameters = [], $uf_data = true)
+    public function createOrUpdateSellLines($transaction, $products, $location_id, $return_deleted = false, $status_before = null, $extra_line_parameters = [], $uf_data = true,$store_id = null)
     {
         $lines_formatted = [];
         $modifiers_array = [];
@@ -328,7 +328,7 @@ class TransactionUtil extends Util
                                         'unit_price' => $this_price,
                                         'unit_price_inc_tax' => $this_price,
                                         'parent_sell_line_id' => $product['transaction_sell_lines_id'],
-                                        'children_type' => 'modifier'
+                                        'children_type' => 'modifier',
                                     ]);
                                 }
                             }
@@ -373,6 +373,7 @@ class TransactionUtil extends Util
                     'unit_price' => $unit_price,
                     'line_discount_type' => !empty($product['line_discount_type']) ? $product['line_discount_type'] : null,
                     'line_discount_amount' => $line_discount_amount,
+                    'store_id' => $store_id,
                     'item_tax' =>  $uf_item_tax / $multiplier,
                     'tax_id' => $product['tax_id'],
                     'unit_price_inc_tax' =>  $uf_unit_price_inc_tax / $multiplier,
@@ -445,7 +446,6 @@ class TransactionUtil extends Util
         }
 
         $combo_lines = [];
-
         if (!empty($lines_formatted)) {
             $transaction->sell_lines()->saveMany($lines_formatted);
 
@@ -478,6 +478,7 @@ class TransactionUtil extends Util
         if (!empty($combo_lines)) {
             $transaction->sell_lines()->saveMany($combo_lines);
         }
+       
 
         if (!empty($modifiers_formatted)) {
             $transaction->sell_lines()->saveMany($modifiers_formatted);

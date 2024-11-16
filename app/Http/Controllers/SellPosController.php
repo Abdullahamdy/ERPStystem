@@ -834,14 +834,13 @@ class SellPosController extends Controller
                 if($request->has('kitchen_send_to')&& $request->kitchen_send_to == "1"){
                     $input['is_suspend'] = 2;
                 }
-              
 
                 $transaction = $this->transactionUtil->createSellTransaction($business_id, $input, $invoice_total, $user_id);
 
                 //Upload Shipping documents
                 Media::uploadMedia($business_id, $transaction, $request, 'shipping_documents', false, 'shipping_document');
                 
-                $this->transactionUtil->createOrUpdateSellLines($transaction, $input['products'], $input['location_id']);
+                $this->transactionUtil->createOrUpdateSellLines($transaction, $input['products'], $input['location_id'],false,null,[],true,$request->store_id);
                 
                 $change_return['amount'] = $input['change_return'] ?? 0;
                 $change_return['is_return'] = 1;

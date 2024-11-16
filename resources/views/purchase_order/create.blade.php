@@ -88,6 +88,12 @@
 					{!! Form::select('location_id', $business_locations, $default_location, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required'], $bl_attributes); !!}
 				</div>
 			</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+					{!! Form::label('store_id', __('store.stores').':*') !!}
+					{!! Form::select('store_id', [], [] ,['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required'], $bl_attributes); !!}
+				</div>
+			</div>
 
 			<!-- Currency Exchange Rate -->
 			<div class="col-sm-3 @if(!$currency_details->purchase_in_diff_currency) hide @endif">
@@ -513,6 +519,42 @@
 		        removeLabel: LANG.remove,
 		    });
     	});
+
+		$(document).ready(function() {
+			$('select[name="location_id"]').on('change', function() {
+                var branch_id = $(this).val();
+                console.log(branch_id);
+
+                if (branch_id) {
+                    $.ajax({
+                        url: '/products/get-stores/' + branch_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            // Check if data is not empty
+                            if (data) {
+                                var storeDropdown = $('select[name="store_id"]');
+                                storeDropdown.empty(); // Clear previous options
+
+                                // Populate dropdown with fetched store data
+                                $.each(data, function(key, value) {
+                                    console.log('the keys is' + key)
+                                    console.log('the value is' + value)
+                                    storeDropdown.append('<option value="' + key +
+                                        '">' + value + '</option>');
+                                });
+                            }
+                        },
+                        error: function() {
+                            alert('Error fetching store details');
+                        }
+                    });
+                } else {
+                    // Optionally, you can clear the store dropdown if no branch is selected
+                    $('select[name="store_id"]').empty();
+                }
+            });
+        })
 	</script>
 	@include('purchase.partials.keyboard_shortcuts')
 @endsection

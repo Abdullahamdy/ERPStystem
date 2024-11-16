@@ -40,13 +40,16 @@
 				</span>
 			{!! Form::select('select_location_id', $business_locations, $default_location->id ?? null, ['class' => 'form-control input-sm',
 			'id' => 'select_location_id', 
-			'required', 'autofocus'], $bl_attributes); !!}
+			'required']); !!}
 			<span class="input-group-addon">
 					@show_tooltip(__('tooltip.sale_location'))
 				</span> 
 			</div>
 		</div>
 	</div>
+	
+
+	
 </div>
 @endif
 
@@ -115,6 +118,22 @@
 					</div>
 					<div class="modal fade types_of_service_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel"></div>
 				@endif
+
+				<div class="col-sm-3">
+					<div class="form-group">
+						<div class="input-group">
+							<span class="input-group-addon">
+								<i class="fa fa-map-marker"></i>
+							</span>
+						{!! Form::select('store_id', [],  null, ['class' => 'form-control input-sm',
+						'id' => 'store_id', 
+						'required']); !!}
+						<span class="input-group-addon">
+								@show_tooltip(__('tooltip.sale_location'))
+							</span> 
+						</div>
+					</div>
+				</div>
 				
 				@if(in_array('subscription', $enabled_modules))
 					<div class="col-md-4 pull-right col-sm-6">
@@ -910,7 +929,41 @@
     	<script src="{{ asset('js/restaurant.js?v=' . $asset_v) }}"></script>
     @endif
     <script type="text/javascript">
-    	$(document).ready( function() {
+
+			$(document).ready(function() {
+			$('select[name="select_location_id"]').on('change', function() {
+                var branch_id = $(this).val();
+                console.log(branch_id);
+
+                if (branch_id) {
+                    $.ajax({
+                        url: '/products/get-stores/' + branch_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            // Check if data is not empty
+                            if (data) {
+                                var storeDropdown = $('select[name="store_id"]');
+                                storeDropdown.empty(); // Clear previous options
+
+                                // Populate dropdown with fetched store data
+                                $.each(data, function(key, value) {
+                                    console.log('the keys is' + key)
+                                    console.log('the value is' + value)
+                                    storeDropdown.append('<option value="' + key +
+                                        '">' + value + '</option>');
+                                });
+                            }
+                        },
+                        error: function() {
+                            alert('Error fetching store details');
+                        }
+                    });
+                } else {
+                    // Optionally, you can clear the store dropdown if no branch is selected
+                    $('select[name="store_id"]').empty();
+                }
+            });
     		$('#status').change(function(){
     			if ($(this).val() == 'final') {
     				$('#payment_rows_div').removeClass('hide');
