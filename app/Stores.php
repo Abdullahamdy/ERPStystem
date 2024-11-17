@@ -20,7 +20,8 @@ class Stores extends Model
 
     public static function forDropdown($business_id, $show_none = false, $filter_use_for_repair = false)
     {
-        $store = self::where('type', 1)->pluck('name_ar', 'id')->toArray();
+        $business_id = request()->session()->get('user.business_id');
+        $store = self::where('business_id',$business_id)->where('type', 1)->pluck('name_ar', 'id')->toArray();
         return $store;
     } 
 
