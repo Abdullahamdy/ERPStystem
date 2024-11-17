@@ -13,7 +13,7 @@ class AddBussinessIdInToPrinters extends Migration
      */
     public function up()
     {
-        Schema::table('printers', function (Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->integer('business_id')->unsigned();
             $table->foreign('business_id')->references('id')->on('business')->onDelete('cascade');
         });
@@ -26,7 +26,7 @@ class AddBussinessIdInToPrinters extends Migration
      */
     public function down()
     {
-        Schema::table('printers', function (Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             //
         });
     }
