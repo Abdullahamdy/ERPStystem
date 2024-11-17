@@ -14,7 +14,7 @@ class AddPrinterIdFieldIntoProductsTables extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->bigInteger('printer_id');
+            $table->bigInteger('printer_id')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddPrinterIdFieldIntoProductsTables extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('printer_id');
+            $table->dropColumn('printer_id')->nullable();
         });
     }
 }
