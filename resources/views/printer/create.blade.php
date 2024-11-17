@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12">
+        {{-- <div class="col-sm-12">
           <div class="form-group">
               {!! Form::label('products', 'القسم التابع' . ':*') !!}
               {!! Form::select('product_ids[]', $products, json_decode($printer->product_ids), [
@@ -47,7 +47,7 @@
                   'multiple'
               ]) !!}
           </div>
-      </div>
+      </div> --}}
 
         <div class="col-sm-12">
           <div class="form-group">
