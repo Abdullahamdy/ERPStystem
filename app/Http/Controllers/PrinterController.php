@@ -64,11 +64,12 @@ class PrinterController extends Controller
         }
 
         $capability_profiles = Printer::capability_profiles();
+        $printer  = Printer::capability_profiles();
         $products = Product::pluck('name','id')->toArray();
         $connection_types = Printer::connection_types();
 
         return view('printer.create')
-            ->with(compact('capability_profiles','products', 'connection_types'));
+            ->with(compact('capability_profiles','printer','products', 'connection_types'));
     }
 
     /**
