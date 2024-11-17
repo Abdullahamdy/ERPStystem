@@ -22,7 +22,7 @@ class TicketController extends Controller
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
 
-            $tables = Ticket::where('status',true)->select(
+            $tables = Ticket::where('status',true)->where('business_id',$business_id)->select(
                 'tickets.product_count',
                 'tickets.ticket_number',
                 'tickets.product_id',
@@ -123,6 +123,7 @@ class TicketController extends Controller
             $data['number_of_day'] = $data['number_of_day'];
             $data['status'] = $data['status'];
             $data['price'] = $data['price'];
+            $data['business_id'] = $business_id;
 
             Ticket::create($data);
 

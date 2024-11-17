@@ -45,7 +45,7 @@ class HeadsStoresController extends Controller
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
 
-            $tables = Stores::head()->select(
+            $tables = Stores::head()->where('business_id',$business_id)->select(
                 'stores.store_number as store_number',
                 'stores.name_ar as name_ar',
                 'stores.name_en as name_en',
@@ -212,9 +212,10 @@ class HeadsStoresController extends Controller
         }
 
         try {
-            $data  =$request->all();
+            $data  = $request->all();
             $data['store_number'] = random_int(1000000000, 9999999999);
             $data['type'] = 1;
+            $data['business_id'] = $business_id;
 
            
             Stores::create($data);

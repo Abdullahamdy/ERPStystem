@@ -46,7 +46,7 @@ class SubsStoresController extends Controller
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
 
-            $tables = Stores::sub()
+            $tables = Stores::where('business_id',$business_id)->sub()
                 ->select(
                     'stores.store_number as store_number',
                     'stores.name_ar as name_ar',
@@ -154,13 +154,13 @@ class SubsStoresController extends Controller
             try {
                 $table = Stores::findOrFail($id);
                 $parent =  Stores::find($table->parent_id);
-
+                $business_id = $request->session()->get('user.business_id');
                 $input = $request->except(['type_cost_hidden', 'store_type_hidden']);
                 $input['type'] = 0;
                 $input['branch_id'] = $parent->branch_id;
                 $input['type_cost'] = $request->input('type_cost_hidden');
                 $input['store_type'] = $request->input('store_type_hidden');
-
+                $input['business_id'] = $business_id;
                 $table->update($input);
 
                 $output = [
@@ -233,12 +233,13 @@ class SubsStoresController extends Controller
                 $parent =  Stores::find($request->parent_id);
                 
                 $input = $request->except(['type_cost_hidden', 'store_type_hidden']);
-
+                $business_id = $request->session()->get('user.business_id');
                 $input['type'] = 0;
                 $input['branch_id'] = $parent->branch_id;
                 $input['store_number'] = random_int(1000000000, 9999999999);
                 $input['type_cost'] = $request->input('type_cost_hidden');
                 $input['store_type'] = $request->input('store_type_hidden');
+                $input['business_id'] = $business_id;
 
                 $table = Stores::create($input);
 
