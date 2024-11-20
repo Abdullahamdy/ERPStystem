@@ -227,4 +227,10 @@ class Product extends Model
     public function printer(){
         return $this->belongsTo(Printer::class,'printer_id');
     }
+
+    public function productGroups()
+    {
+        return $this->belongsToMany(ProductGroup::class, 'product_group_items', 'product_id', 'group_id')
+                    ->withTimestamps();
+    }
 }

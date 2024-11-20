@@ -478,6 +478,7 @@ class AdminSidebarMenu
                 },
                 ['icon' => 'fa fas fa-kitchen-set', 'id' => 'tour_step9']
             )->order(10);
+
             //المخازن اضافه 
 
             $menu->dropdown(
@@ -491,6 +492,11 @@ class AdminSidebarMenu
                     $sub->url(
                         url('modules/tickets'),
                         '- التذاكر',
+                        ['icon' => 'fa fas fa-table', 'active' => request()->segment(2) == 'tables']
+                    );
+                    $sub->url(
+                        url('modules/products-group'),
+                        '-المجموعات ',
                         ['icon' => 'fa fas fa-table', 'active' => request()->segment(2) == 'tables']
                     );
                     $sub->url(

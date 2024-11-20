@@ -2127,6 +2127,7 @@ class SellPosController extends Controller
      */
     public function getProductSuggestion(Request $request)
     {
+       
         if ($request->ajax()) {
             $category_id = $request->get('category_id');
             $brand_id = $request->get('brand_id');
@@ -2135,6 +2136,7 @@ class SellPosController extends Controller
 
             $check_qty = false;
             $business_id = $request->session()->get('user.business_id');
+           
             $business = $request->session()->get('business');
             $pos_settings = empty($business->pos_settings) ? $this->businessUtil->defaultPosSettings() : json_decode($business->pos_settings, true);
 

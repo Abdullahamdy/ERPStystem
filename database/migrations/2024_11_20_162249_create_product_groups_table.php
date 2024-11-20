@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBussinessIdInToPrinters extends Migration
+class CreateProductGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddBussinessIdInToPrinters extends Migration
      */
     public function up()
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            // $table->integer('business_id')->unsigned();
-            // $table->foreign('business_id')->references('id')->on('business')->onDelete('cascade');
+        Schema::create('product_groups', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,8 +28,6 @@ class AddBussinessIdInToPrinters extends Migration
      */
     public function down()
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('product_groups');
     }
 }

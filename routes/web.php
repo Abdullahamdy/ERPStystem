@@ -364,6 +364,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
 
         Route::get('/kitchen', 'Restaurant\KitchenController@index');
         Route::resource('/tickets', 'Restaurant\TicketController');
+        Route::resource('/products-group', 'Restaurant\ProductsGroupController');
         
 
       
