@@ -62,37 +62,82 @@ class ProductsGroupController extends Controller
 
     public function create(Request $request)
     {
+
+      if ($request->ajax()) {
         $category_id = $request->get('category_id');
 
         $brand_id = $request->get('brand_id');
-        $location_id = "13";
         $term = $request->get('term');
 
         $business_id = $request->session()->get('user.business_id');
         $business = $request->session()->get('business');
-
+        $location_id = !empty(request()->input('location_id')) ? request()->input('location_id') : null;
         $products = Variation::join('products as p', 'variations.product_id', '=', 'p.id')
-            ->join('product_locations as pl', 'pl.product_id', '=', 'p.id')
-            ->leftjoin(
-                'variation_location_details AS VLD',
-                function ($join) use ($location_id) {
-                    $join->on('variations.id', '=', 'VLD.variation_id');
-                }
-            )
-            ->where('p.business_id', $business_id)
-            ->where('p.type', '!=', 'modifier')
-            ->where('p.is_inactive', 0)
-            ->where('p.not_for_selling', 0)
-            //Hide products not available in the selected location
-            ->where(function ($q) use ($location_id) {
-                $q->where('pl.location_id', $location_id);
-            });
+        ->join('product_locations as pl', 'pl.product_id', '=', 'p.id')
+        ->leftjoin(
+            'variation_location_details AS VLD',
+            function ($join) use ($location_id) {
+                $join->on('variations.id', '=', 'VLD.variation_id');
 
-        $products = $products->select(
-            'p.id as product_id',
-            'p.name as product_name',
-            
+                //Include Location
+                if (!empty($location_id)) {
+                    $join->where(function ($query) use ($location_id) {
+                        //Check null to show products even if no quantity is available in a location.
+                        //TODO: Maybe add a settings to show product not available at a location or not.
+                        $query->orWhereNull('VLD.location_id');
+                    });
+                    ;
+                }
+            }
         )
+                ->where('p.business_id', $business_id)
+                ->where('p.type', '!=', 'modifier')
+                ->where('p.is_inactive', 0)
+                ->where('p.not_for_selling', 0)
+                //Hide products not available in the selected location
+                ->where(function ($q) use ($location_id) {
+                });
+
+    
+
+    //Include check for quantity
+   
+    
+    if (!empty($category_id) && ($category_id != 'all')) {
+        $products->where(function ($query) use ($category_id) {
+            $query->where('p.category_id', $category_id);
+            $query->orWhere('p.sub_category_id', $category_id);
+        });
+    }
+    if (!empty($brand_id) && ($brand_id != 'all')) {
+        $products->where('p.brand_id', $brand_id);
+    }
+
+    if (!empty($request->get('is_enabled_stock'))) {
+        $is_enabled_stock = 0;
+        if ($request->get('is_enabled_stock') == 'product') {
+            $is_enabled_stock = 1;
+        }
+
+        $products->where('p.enable_stock', $is_enabled_stock);
+    }
+
+    if (!empty($request->get('repair_model_id'))) {
+        $products->where('p.repair_model_id', $request->get('repair_model_id'));
+    }
+
+    $products = $products->select(
+        'p.id as product_id',
+        'p.name as product_name',
+        'p.type',
+        'p.enable_stock',
+        'p.image as product_image',
+        'variations.id',
+        'variations.name as variation',
+        'VLD.qty_available',
+        'variations.default_sell_price as selling_price',
+        'variations.sub_sku'
+    )
             ->orderBy('p.name', 'asc')
             ->pluck('product_name', 'product_id')->toArray();
 
@@ -104,6 +149,7 @@ class ProductsGroupController extends Controller
                 $allowed_group_prices[$key] = $value;
             }
         }
+    }
 
 
         return view('products-group.create', compact('products'));
@@ -129,7 +175,7 @@ class ProductsGroupController extends Controller
 
             return response()->json([
                 'success' => true,
-                'msg' => __('messages.group_created_successfully'),
+                'msg' => __("lang_v1.added_success"),
             ]);
         } catch (\Exception $e) {
             dd($e);
@@ -150,30 +196,77 @@ class ProductsGroupController extends Controller
 
     public function edit($id,Request $request)
     {
-        $business_id = $request->session()->get('user.business_id');
-        $location_id = "13";
         $productGroup = ProductGroup::findOrFail($id);
+
+        
+        $business_id = $request->session()->get('user.business_id');
+        $business = $request->session()->get('business');
+        $location_id = !empty(request()->input('location_id')) ? request()->input('location_id') : null;
         $products = Variation::join('products as p', 'variations.product_id', '=', 'p.id')
         ->join('product_locations as pl', 'pl.product_id', '=', 'p.id')
         ->leftjoin(
             'variation_location_details AS VLD',
             function ($join) use ($location_id) {
                 $join->on('variations.id', '=', 'VLD.variation_id');
+
+                //Include Location
+                if (!empty($location_id)) {
+                    $join->where(function ($query) use ($location_id) {
+                        //Check null to show products even if no quantity is available in a location.
+                        //TODO: Maybe add a settings to show product not available at a location or not.
+                        $query->orWhereNull('VLD.location_id');
+                    });
+                    ;
+                }
             }
         )
-        ->where('p.business_id', $business_id)
-        ->where('p.type', '!=', 'modifier')
-        ->where('p.is_inactive', 0)
-        ->where('p.not_for_selling', 0)
-        //Hide products not available in the selected location
-        ->where(function ($q) use ($location_id) {
-            $q->where('pl.location_id', $location_id);
+                ->where('p.business_id', $business_id)
+                ->where('p.type', '!=', 'modifier')
+                ->where('p.is_inactive', 0)
+                ->where('p.not_for_selling', 0)
+                //Hide products not available in the selected location
+                ->where(function ($q) use ($location_id) {
+                });
+
+    
+
+    //Include check for quantity
+   
+    
+    if (!empty($category_id) && ($category_id != 'all')) {
+        $products->where(function ($query) use ($category_id) {
+            $query->where('p.category_id', $category_id);
+            $query->orWhere('p.sub_category_id', $category_id);
         });
+    }
+    if (!empty($brand_id) && ($brand_id != 'all')) {
+        $products->where('p.brand_id', $brand_id);
+    }
+
+    if (!empty($request->get('is_enabled_stock'))) {
+        $is_enabled_stock = 0;
+        if ($request->get('is_enabled_stock') == 'product') {
+            $is_enabled_stock = 1;
+        }
+
+        $products->where('p.enable_stock', $is_enabled_stock);
+    }
+
+    if (!empty($request->get('repair_model_id'))) {
+        $products->where('p.repair_model_id', $request->get('repair_model_id'));
+    }
 
     $products = $products->select(
         'p.id as product_id',
         'p.name as product_name',
-        
+        'p.type',
+        'p.enable_stock',
+        'p.image as product_image',
+        'variations.id',
+        'variations.name as variation',
+        'VLD.qty_available',
+        'variations.default_sell_price as selling_price',
+        'variations.sub_sku'
     )
         ->orderBy('p.name', 'asc')
         ->pluck('product_name', 'product_id')->toArray();
@@ -208,7 +301,7 @@ class ProductsGroupController extends Controller
     
             \DB::commit();
     
-            return response()->json(['success' => true, 'msg' => __('messages.updated_successfully')]);
+            return response()->json(['success' => true, 'msg' => __("lang_v1.updated_success")]);
         } catch (\Exception $e) {
             \DB::rollBack();
     

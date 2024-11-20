@@ -10,30 +10,30 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">@lang('messages.edit_product_group')</h4>
+            <h4 class="modal-title">@lang('groups.edit_group')</h4>
         </div>
 
         <div class="modal-body">
             <div class="form-group">
-                {!! Form::label('name', __('messages.group_name') . ':*') !!}
+                {!! Form::label('name', __('groups.group_name') . ':*') !!}
                 {!! Form::text('name', $productGroup->name, [
                     'class' => 'form-control',
                     'required',
-                    'placeholder' => __('messages.enter_group_name')
+                    'placeholder' =>__('groups.group_name')
                 ]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('description', __('messages.description') . ':') !!}
+                {!! Form::label('description', __('groups.group_description') . ':') !!}
                 {!! Form::textarea('description', $productGroup->description, [
                     'class' => 'form-control',
                     'rows' => 3,
-                    'placeholder' => __('messages.enter_description')
+                    'placeholder' => __('groups.group_description')
                 ]) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('products', __('messages.select_products') . ':*') !!}
+                {!! Form::label('products', __('groups.select_products') . ':*') !!}
                 {!! Form::select(
                     'products[]',
                     $products,
@@ -42,7 +42,7 @@
                         'class' => 'form-control select2',
                         'multiple' => 'multiple',
                         'required',
-                        'data-placeholder' => __('messages.please_select_products')
+                        'data-placeholder' => __('groups.products') 
                     ]
                 ) !!}
             </div>

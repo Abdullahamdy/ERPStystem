@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', __('store.subs_stores'))
+@section('title', __('groups.groups'))
 
 @section('content')
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>@lang('store.subs_stores')
-            <small>@lang('store.manage_your_subs_stores')</small>
+        <h1>@lang('groups.groups')
+            <small>@lang('groups.manage_your_groups')</small>
         </h1>
         <!-- <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -21,7 +21,7 @@
 
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">@lang('store.subs_stores')</h3>
+                <h3 class="box-title">@lang('groups.groups')</h3>
                 @can('restaurant.create')
                     <div class="box-tools">
                         <button type="button" class="btn btn-block btn-primary btn-modal"
@@ -36,7 +36,7 @@
                     <table class="table table-bordered table-striped" id="group_products_table">
                         <thead>
                             <tr>
-                                <th>اسم المجموعة</th>
+                                <th>@lang('groups.products')</th>
                                 <th>المنتجات</th>
                                 <th>@lang('store.action')</th>
                             </tr>
