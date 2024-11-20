@@ -2127,6 +2127,11 @@ class SellPosController extends Controller
      */
     public function getProductSuggestion(Request $request)
     {
+        if(auth()->user()->productGroup &&auth()->user()->productGroup->products &&  auth()->user()->productGroup->products()->pluck('id')){
+            $assignProducts = auth()->user()->productGroup->products()->pluck('id');
+        }else{
+            $assignProducts = [];
+        }
        
         if ($request->ajax()) {
             $category_id = $request->get('category_id');
@@ -2204,6 +2209,9 @@ class SellPosController extends Controller
             if (!empty($request->get('repair_model_id'))) {
                 $products->where('p.repair_model_id', $request->get('repair_model_id'));
             }
+            
+        
+        $products->whereIn('p.id',$assignProducts);
 
             $products = $products->select(
                 'p.id as product_id',

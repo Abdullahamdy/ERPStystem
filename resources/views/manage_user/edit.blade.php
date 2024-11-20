@@ -40,6 +40,12 @@
                     {!! Form::text('email', $user->email, ['class' => 'form-control', 'required', 'placeholder' => __( 'business.email' ) ]); !!}
                 </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                {!! Form::label('group_id', 'الجروبات') !!} @show_tooltip(__('lang_v1.admin_role_location_permission_help'))
+                  {!! Form::select('group_id',  $product_groups, $user->group_id, ['class' => 'form-control select2']); !!}
+              </div>
+            </div>
 
             <div class="col-md-4">
                 <div class="form-group">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BusinessLocation;
 use App\Contact;
+use App\ProductGroup;
 use App\System;
 use App\User;
 use App\Utils\ModuleUtil;
@@ -108,12 +109,13 @@ class ManageUserController extends Controller
         $locations = BusinessLocation::where('business_id', $business_id)
                                     ->Active()
                                     ->get();
+                                    $product_groups = ProductGroup::pluck('name','id')->toArray();
 
         //Get user form part from modules
         $form_partials = $this->moduleUtil->getModuleData('moduleViewPartials', ['view' => 'manage_user.create']);
 
         return view('manage_user.create')
-                ->with(compact('roles', 'username_ext', 'locations', 'form_partials'));
+                ->with(compact('roles', 'username_ext', 'locations', 'form_partials','product_groups'));
     }
 
     /**
@@ -137,7 +139,6 @@ class ManageUserController extends Controller
             $request['cmmsn_percent'] = !empty($request->input('cmmsn_percent')) ? $this->moduleUtil->num_uf($request->input('cmmsn_percent')) : 0;
 
             $request['max_sales_discount_percent'] = !is_null($request->input('max_sales_discount_percent')) ? $this->moduleUtil->num_uf($request->input('max_sales_discount_percent')) : null;
-
             $user = $this->moduleUtil->createUser($request);
 
             $output = ['success' => 1,
@@ -220,9 +221,9 @@ class ManageUserController extends Controller
 
         //Get user form part from modules
         $form_partials = $this->moduleUtil->getModuleData('moduleViewPartials', ['view' => 'manage_user.edit', 'user' => $user]);
-        
+        $product_groups = ProductGroup::pluck('name','id')->toArray();
         return view('manage_user.edit')
-                ->with(compact('roles', 'user', 'contact_access', 'is_checked_checkbox', 'locations', 'permitted_locations', 'form_partials', 'username_ext'));
+                ->with(compact('roles', 'user', 'contact_access', 'is_checked_checkbox', 'locations', 'permitted_locations', 'form_partials', 'username_ext','product_groups'));
     }
 
     /**
@@ -242,7 +243,7 @@ class ManageUserController extends Controller
             $user_data = $request->only(['surname', 'first_name', 'last_name', 'email', 'selected_contacts', 'marital_status',
                 'blood_group', 'contact_number', 'fb_link', 'twitter_link', 'social_media_1',
                 'social_media_2', 'permanent_address', 'current_address',
-                'guardian_name', 'custom_field_1', 'custom_field_2',
+                'guardian_name', 'custom_field_1', 'custom_field_2','group_id',
                 'custom_field_3', 'custom_field_4', 'id_proof_name', 'id_proof_number', 'cmmsn_percent', 'gender', 'max_sales_discount_percent', 'family_number', 'alt_number']);
 
             $user_data['status'] = !empty($request->input('is_active')) ? 'active' : 'inactive';
