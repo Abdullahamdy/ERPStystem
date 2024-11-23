@@ -30,37 +30,37 @@ class AdminSidebarMenu
             $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
             //Home
             $menu->url(action('HomeController@index'), __('home.home'), ['icon' => 'fa fas fa-tachometer-alt', 'active' => request()->segment(1) == 'home'])->order(5);
-
-            //User management dropdown
-            if (auth()->user()->can('user.view') || auth()->user()->can('user.create') || auth()->user()->can('roles.view')) {
-                $menu->dropdown(
-                    __('user.user_management'),
-                    function ($sub) {
-                        if (auth()->user()->can('user.view')) {
-                            $sub->url(
-                                action('ManageUserController@index'),
-                                __('user.users'),
-                                ['icon' => 'fa fas fa-user', 'active' => request()->segment(1) == 'users']
-                            );
-                        }
-                        if (auth()->user()->can('roles.view')) {
-                            $sub->url(
-                                action('RoleController@index'),
-                                __('user.roles'),
-                                ['icon' => 'fa fas fa-briefcase', 'active' => request()->segment(1) == 'roles']
-                            );
-                        }
-                        if (auth()->user()->can('user.create')) {
-                            $sub->url(
-                                action('SalesCommissionAgentController@index'),
-                                __('lang_v1.sales_commission_agents'),
-                                ['icon' => 'fa fas fa-handshake', 'active' => request()->segment(1) == 'sales-commission-agents']
-                            );
-                        }
-                    },
-                    ['icon' => 'fa fas fa-users']
-                )->order(10);
-            }
+    //User management dropdown
+    if (auth()->user()->can('user.view') || auth()->user()->can('user.create') || auth()->user()->can('roles.view')) {
+        $menu->dropdown(
+            __('user.user_management'),
+            function ($sub) {
+                if (auth()->user()->can('user.view')) {
+                    $sub->url(
+                        action('ManageUserController@index'),
+                        __('user.users'),
+                        ['icon' => 'fa fas fa-user', 'active' => request()->segment(1) == 'users']
+                    );
+                }
+                if (auth()->user()->can('roles.view')) {
+                    $sub->url(
+                        action('RoleController@index'),
+                        __('user.roles'),
+                        ['icon' => 'fa fas fa-briefcase', 'active' => request()->segment(1) == 'roles']
+                    );
+                }
+                if (auth()->user()->can('user.create')) {
+                    $sub->url(
+                        action('SalesCommissionAgentController@index'),
+                        __('lang_v1.sales_commission_agents'),
+                        ['icon' => 'fa fas fa-handshake', 'active' => request()->segment(1) == 'sales-commission-agents']
+                    );
+                }
+            },
+            ['icon' => 'fa fas fa-users']
+        )->order(6.1);
+    }
+        
 
             //Contacts dropdown
             if (auth()->user()->can('supplier.view') || auth()->user()->can('customer.view') || auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own')) {
@@ -103,7 +103,7 @@ class AdminSidebarMenu
                         }
                     },
                     ['icon' => 'fa fas fa-address-book', 'id' => "tour_step4"]
-                )->order(15);
+                )->order(6.2);
             }
 
             //Products dropdown
@@ -230,7 +230,7 @@ class AdminSidebarMenu
                         }
                     },
                     ['icon' => 'fa fas fa-arrow-circle-down', 'id' => 'tour_step6']
-                )->order(25);
+                )->order(6.8);
             }
             //Sell dropdown
             if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return', 'direct_sell.view', 'direct_sell.update', 'access_own_sell_return'])) {
@@ -345,7 +345,7 @@ class AdminSidebarMenu
                         }
                     },
                     ['icon' => 'fa fas fa-arrow-circle-up', 'id' => 'tour_step7']
-                )->order(30);
+                )->order(6.9);
             }
 
             //Stock transfer dropdown
@@ -458,7 +458,7 @@ class AdminSidebarMenu
                         );
                     },
                     ['icon' => 'fa fas fa-money-check-alt']
-                )->order(50);
+                )->order(7.8);
             }
 
             $menu->dropdown(
@@ -477,7 +477,7 @@ class AdminSidebarMenu
                     );
                 },
                 ['icon' => 'fa fas fa-kitchen-set', 'id' => 'tour_step9']
-            )->order(10);
+            )->order(6.3);
 
             //المخازن اضافه 
 
@@ -526,7 +526,7 @@ class AdminSidebarMenu
                     );
                 },
                 ['icon' => 'fa fas fa-kitchen-set', 'id' => 'tour_step9']
-            )->order(5);
+            )->order(7);
 
             //Reports dropdown
             if (
@@ -813,7 +813,7 @@ class AdminSidebarMenu
                         }
                     },
                     ['icon' => 'fa fas fa-cog', 'id' => 'tour_step3']
-                )->order(85);
+                )->order(7.9);
             }
         });
         //Add menus from modules
