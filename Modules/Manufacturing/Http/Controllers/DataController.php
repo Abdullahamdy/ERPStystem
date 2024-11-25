@@ -73,7 +73,7 @@ class DataController extends Controller
                         __('manufacturing::lang.manufacturing'),
                         ['icon' => 'fa fas fa-industry', 'style' => config('app.env') == 'demo' ? 'background-color: #ff851b;' : '', 'active' => request()->segment(1) == 'manufacturing']
                     )
-                ->order(6.8);
+                ->order(20);
             });
         }
     }
