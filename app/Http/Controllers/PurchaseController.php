@@ -397,7 +397,7 @@ class PurchaseController extends Controller
             $purchase_lines = [];
             $purchases = $request->input('purchases');
 
-            $this->productUtil->createOrUpdatePurchaseLines($transaction, $purchases, $currency_details, $enable_product_editing);
+            $this->productUtil->createOrUpdatePurchaseLines($transaction, $purchases, $currency_details, $enable_product_editing, null,$request->store_id);
 
             //Add Purchase payments
             $this->transactionUtil->createOrUpdatePaymentLines($transaction, $request->input('payment'));
