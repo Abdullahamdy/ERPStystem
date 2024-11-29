@@ -312,11 +312,20 @@ class SellController extends Controller
                 if ($is_service_staff_enabled) {
                     $with[] = 'service_staff';
                 }
+if(request('suspended') == 2 ){
+    $sales = $sells->where('transactions.is_suspend', 2)
+    ->with($with)
+    ->addSelect('transactions.is_suspend', 'transactions.res_table_id', 'transactions.res_waiter_id', 'transactions.additional_notes')
+    ->get();
 
-                $sales = $sells->where('transactions.is_suspend', 1)->orWhere('transactions.is_suspend', 2)
-                            ->with($with)
-                            ->addSelect('transactions.is_suspend', 'transactions.res_table_id', 'transactions.res_waiter_id', 'transactions.additional_notes')
-                            ->get();
+}else{
+    $sales = $sells->where('transactions.is_suspend', 1)
+    ->with($with)
+    ->addSelect('transactions.is_suspend', 'transactions.res_table_id', 'transactions.res_waiter_id', 'transactions.additional_notes')
+    ->get();
+    
+}
+               
 
                 return view('sale_pos.partials.suspended_sales_modal')->with(compact('sales', 'is_tables_enabled', 'is_service_staff_enabled', 'transaction_sub_type'));
             }

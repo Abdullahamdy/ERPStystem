@@ -3,6 +3,7 @@
     $go_back_url = action('SellPosController@index');
     $transaction_sub_type = '';
     $view_suspended_sell_url = action('SellController@index').'?suspended=1';
+    $view_suspended_sell_url2 = action('SellController@index').'?suspended=2';
     $pos_redirect_url = action('SellPosController@create');
 @endphp
 
@@ -77,6 +78,14 @@
       <button type="button" title="{{ __('lang_v1.full_screen') }}" class="btn btn-primary btn-flat m-6 hidden-xs btn-xs m-5 pull-right" id="full_screen">
             <strong><i class="fa fa-window-maximize fa-lg"></i></strong>
       </button>
+
+      <button type="button" id="view_suspended_sales" title="{{ __('lang_v1.view_suspended_sales') }}" 
+      class="btn bg-default btn-flat m-6 btn-xs m-5 btn-modal pull-right" 
+      data-container=".view_modal" 
+      data-href="{{$view_suspended_sell_url2}}">
+  <strong><i class="fa fa-utensils fa-lg"></i></strong>
+</button>
+
 
       <button type="button" id="view_suspended_sales" title="{{ __('lang_v1.view_suspended_sales') }}" class="btn bg-yellow btn-flat m-6 btn-xs m-5 btn-modal pull-right" data-container=".view_modal" 
           data-href="{{$view_suspended_sell_url}}">

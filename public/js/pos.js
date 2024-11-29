@@ -730,6 +730,7 @@ $(document).ready(function() {
     });
 
     $('button#pos-suspend').click(function() {
+        console.log('isis_sups')
         $('input#is_suspend').val(1);
         $('div#confirmSuspendModal').modal('hide');
         pos_form_obj.submit();
