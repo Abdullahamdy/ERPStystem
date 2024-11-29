@@ -27,7 +27,7 @@ class ProductsGroupController extends Controller
             $business_id = request()->session()->get('user.business_id');
 
             // Query to get Product Groups with Products
-            $tables = ProductGroup::with(['products' => function ($query) {
+            $tables = ProductGroup::where('business_id',$business_id)->with(['products' => function ($query) {
                 $query->select('products.id', 'products.name'); // Fetch only necessary columns
             }])
                 // Restrict to current business
@@ -165,7 +165,8 @@ class ProductsGroupController extends Controller
 
             $group = ProductGroup::create([
                 'name' => $validated['name'],
-                'description' => $validated['description']
+                'description' => $validated['description'],
+                'business_id' => request()->session()->get('user.business_id'),
             ]);
 
             \Log::info('Syncing product IDs:', $validated['products']);
@@ -294,6 +295,7 @@ class ProductsGroupController extends Controller
             $productGroup->update([
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
+                'business_id' => request()->session()->get('user.business_id'),
             ]);
     
             // Sync the selected products
