@@ -3,7 +3,7 @@
 "tickets" => "التذاكر",
 "manage_your_tickets" => "إدارة التذاكر",
 "all_your_tickets" => "كل التذاكر الخاصة بك",
-"number_of_day" => "عدد الأيام",
+"number_of_day" => "عدد الساعات",
 "products" => "المنتجات",
 "product_count" => "عدد المنتجات",
 "ticket_number" => "رقم التذكرة",

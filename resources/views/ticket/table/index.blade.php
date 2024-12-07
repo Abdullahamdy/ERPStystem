@@ -60,26 +60,46 @@
 @section('javascript')
     <script type="text/javascript">
         $(document).ready(function(){
-            $(document).on('submit', 'form#table_add_form', function(e){
-                e.preventDefault();
-                var data = $(this).serialize();
+            $(document).on('submit', 'form#table_add_form', function(e) {
+        e.preventDefault();
+        var data = $(this).serialize();
 
-                $.ajax({
-                    method: "POST",
-                    url: $(this).attr("action"),
-                    dataType: "json",
-                    data: data,
-                    success: function(result){
-                        if(result.success == true){
-                            $('div.tables_modal').modal('hide');
-                            toastr.success(result.msg);
-                            tables_table.ajax.reload();
-                        } else {
-                            toastr.error(result.msg);
-                        }
+        $.ajax({
+            method: "POST",
+            url: $(this).attr("action"),
+            dataType: "json",
+            data: data,
+            success: function(result) {
+                if (result.success == true) {
+                    // إذا تم إنشاء التذكرة بنجاح
+                    $('div.tables_modal').modal('hide');
+                    toastr.success(result.msg);
+
+                    // تحديث الجدول
+                    if (typeof tables_table !== 'undefined') {
+                        tables_table.ajax.reload();
                     }
-                });
-            });
+
+                    // التحقق من وجود محتوى HTML للطباعة
+                    if (result.html_content) {
+                        var printWindow = window.open('', '_blank');
+                        printWindow.document.open();
+                        printWindow.document.write(result.html_content);
+                        printWindow.document.close();
+
+                        // التأكد من أن نافذة الطباعة تُعرض
+                        printWindow.focus();
+                    }
+                } else {
+                    toastr.error(result.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Something went wrong.");
+                console.error("Error:", error);
+            }
+        });
+    });
 
             //Brands table
             var tables_table = $('#tickets_table').DataTable({

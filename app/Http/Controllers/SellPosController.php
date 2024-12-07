@@ -33,11 +33,16 @@ use App\BusinessLocation;
 use App\Category;
 use App\Contact;
 use App\CustomerGroup;
+use App\InvoiceLayout;
+use App\InvoiceScheme;
 use App\Media;
 use App\Product;
+use App\SalesOrderController;
 use App\SellingPriceGroup;
 use App\TaxRate;
+use App\Ticket;
 use App\Transaction;
+use App\TransactionPayment;
 use App\TransactionSellLine;
 use App\TypesOfService;
 use App\User;
@@ -50,18 +55,15 @@ use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
 use App\Variation;
 use App\Warranty;
-use App\InvoiceLayout;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Yajra\DataTables\Facades\DataTables;
-use App\InvoiceScheme;
-use App\SalesOrderController;
 use Razorpay\Api\Api;
-use App\TransactionPayment;
 use Stripe\Charge;
 use Stripe\Stripe;
+use Yajra\DataTables\Facades\DataTables;
 
 class SellPosController extends Controller
 {
@@ -152,6 +154,7 @@ class SellPosController extends Controller
      */
     public function create()
 {
+   
     $business_id = request()->session()->get('user.business_id');
 
     if (!(auth()->user()->can('superadmin') || auth()->user()->can('sell.create') || ($this->moduleUtil->hasThePermissionInSubscription($business_id, 'repair_module') && auth()->user()->can('repair.create')))) {
@@ -252,9 +255,15 @@ class SellPosController extends Controller
 
     // Added check because $users is of no use if enable_contact_assign if false
     $users = config('constants.enable_contact_assign') ? User::forDropdown($business_id, false, false, false, true) : [];
-
-    return view('sale_pos.create')
+    $tickets = Ticket::where('status', 1)
+    ->get()
+    ->filter(function ($ticket) {
+        $expiryDate = Carbon::parse($ticket->created_at)->addHours($ticket->number_of_day);
+        return now()->lt($expiryDate);    
+    });
+        return view('sale_pos.create')
         ->with(compact(
+            'tickets',
             'edit_discount',
             'edit_price',
             'business_locations',
@@ -963,6 +972,7 @@ class SellPosController extends Controller
                 if (!auth()->user()->can("print_invoice")) {
                     $print_invoice = false;
                 }
+                
                 
                 if ($print_invoice) {
                     $receipt = $this->receiptContent($business_id, $input['location_id'], $transaction->id, null, false, true, $invoice_layout_id);
@@ -1980,6 +1990,7 @@ class SellPosController extends Controller
                 }
             }
         } catch (\Exception $e) {
+            dd($e);
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
 
             $output['success'] = false;

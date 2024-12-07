@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Restaurant\TicketController;
+use App\Ticket;
+
 
 
 /*
@@ -364,6 +366,10 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
 
         Route::get('/kitchen', 'Restaurant\KitchenController@index');
         Route::resource('/tickets', 'Restaurant\TicketController');
+        Route::get('/tickets/print/{id}', function ($id) {
+            $ticket = Ticket::findOrFail($id); // Retrieve the ticket by ID
+            return view('ticket.table.print', compact('ticket')); // Pass the ticket to the print view
+        })->name('tickets.print');
         Route::resource('/products-group', 'Restaurant\ProductsGroupController');
         
 

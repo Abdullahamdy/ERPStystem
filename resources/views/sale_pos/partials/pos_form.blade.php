@@ -207,10 +207,7 @@
                     <div class="modal-body" style="max-height: 800px">
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            @inject('ticketModel', '\App\Ticket');
-                            @php
-                                $tickets = $ticketModel->where('status', 1)->get();
-                            @endphp
+                        
 
                             <select class="select2 form-control" name="recipient" id="recipient"
                             width="500"
