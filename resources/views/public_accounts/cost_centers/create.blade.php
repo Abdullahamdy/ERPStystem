@@ -19,7 +19,7 @@
 
             <div class="form-group">
                 {!! Form::label('type', __('public_account.type') . ':*') !!}
-                {!! Form::select('type', ['income' => __('public_account.income'), 'expense' => __('public_account.expense')], null, ['class' => 'form-control', 'required', 'placeholder' => __('messages.please_select')]); !!}
+                {!! Form::select('type', ['main' => __('public_account.main'), 'detailed' => __('public_account.detailed')], null, ['class' => 'form-control', 'required', 'placeholder' => __('messages.please_select')]); !!}
             </div>
 
             <div class="form-group">
@@ -27,10 +27,7 @@
                 {!! Form::select('status', ['active' => __('public_account.active'), 'inactive' => __('public_account.inactive')], null, ['class' => 'form-control', 'required', 'placeholder' => __('messages.please_select')]); !!}
             </div>
 
-            <div class="form-group">
-                {!! Form::label('center_code', __('public_account.center_code') . ':*') !!}
-                {!! Form::text('center_code', null, ['class' => 'form-control', 'required', 'placeholder' => __('public_account.center_code')]); !!}
-            </div>
+           
         </div>
 
         <div class="modal-footer">

@@ -6,6 +6,12 @@ return [
 "type" => " النوع",
 "status" => " الحالة",
 "center_code" => "كود المركز ",
-'action'=>'الاعدادات'
+'action'=>'',
+'inactive'=>'غير نشط',
+'active'=>'نشط',
+'main'=>'رئيسي',
+'detailed'=>'تفصيلي',
+'cost_centers'=>'مراكز التكلفه',
+'cost_centers_manage'=>'ادارة مراكز التكلفه',
 
 ];

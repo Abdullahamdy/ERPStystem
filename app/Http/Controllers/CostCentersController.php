@@ -27,7 +27,7 @@ class CostCentersController extends Controller
         if (request()->ajax()) {
         $business_id = session()->get('user.business_id');
        
-        $costcenters = CostCenter::select(
+        $costcenters = CostCenter::where('business_id',$business_id)->select(
             'cost_centers.id as id',
             'cost_centers.name_ar as name_ar',
             'cost_centers.name_en as name_en',
@@ -83,10 +83,10 @@ class CostCentersController extends Controller
                 'name_en' => 'required|string|max:255',
                 'type' => 'required|string',
                 'status' => 'required',
-                'center_code' => 'required|string|unique:cost_centers,center_code'
             ]);
     
             $input['business_id'] = session()->get('user.business_id');
+            $input['center_code'] = random_int(1000000000, 9999999999);;
     
             $costCenter = CostCenter::create($input);
             $output = [
@@ -129,7 +129,6 @@ class CostCentersController extends Controller
                 'name_en' => 'required|string|max:255',
                 'type' => 'required|string',
                 'status' => 'required',
-                'center_code' => 'required|string|unique:cost_centers,center_code,' . $id
             ]);
     
             $business_id = session()->get('user.business_id');

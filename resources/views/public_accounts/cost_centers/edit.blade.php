@@ -34,7 +34,7 @@
                 {!! Form::label('type', __('public_account.type') . ':*') !!}
                 {!! Form::select(
                     'type',
-                    ['income' => __('public_account.income'), 'expense' => __('public_account.expense')],
+                    ['main' => __('public_account.main'), 'detailed' => __('public_account.detailed')],
                     $cost_center->type,
                     ['class' => 'form-control', 'required', 'placeholder' => __('messages.please_select')],
                 ) !!}
@@ -50,14 +50,7 @@
                 ) !!}
             </div>
 
-            <div class="form-group">
-                {!! Form::label('center_code', __('public_account.center_code') . ':*') !!}
-                {!! Form::text('center_code', $cost_center->center_code, [
-                    'class' => 'form-control',
-                    'required',
-                    'placeholder' => __('public_account.center_code'),
-                ]) !!}
-            </div>
+            
         </div>
 
         <div class="modal-footer">

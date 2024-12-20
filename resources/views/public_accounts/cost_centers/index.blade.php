@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', __('store.subs_stores'))
+@section('title', __('public_account.cost_centers'))
 
 @section('content')
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>@lang('store.subs_stores')
-            <small>@lang('store.manage_your_subs_stores')</small>
+        <h1>@lang('public_account.cost_centers')
+            <small>@lang('public_account.cost_centers_manage')</small>
         </h1>
         <!-- <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -21,7 +21,7 @@
 
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">@lang('store.subs_stores')</h3>
+                <h3 class="box-title">@lang('public_account.cost_centers')</h3>
                 @can('restaurant.create')
                     <div class="box-tools">
                         <button type="button" class="btn btn-block btn-primary btn-modal"
