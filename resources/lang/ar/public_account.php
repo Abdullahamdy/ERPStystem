@@ -1,7 +1,7 @@
 <?php
 return [
 "cost_centers" => "مراكز التكلفة",
-"budgetclassification" => "دليل تصنيفات",
+"budgetclassification" => "دليل تصنيفات الميزانيه",
 "list_income_classifications" => "دليل تصنيفات الدخل",
 "name_ar" => "الاسم باللغه العربية",
 "name_en" => " الاسم باللغه الانجليزيه",
