@@ -327,6 +327,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
         Route::resource('/account', 'AccountController');
         Route::resource('/cost_centers', 'CostCentersController');
         Route::resource('/income_classification', 'IncomeClassificationController');
+        Route::resource('/budget-classification', 'BudgetClassificationController');
         Route::get('/fund-transfer/{id}', 'AccountController@getFundTransfer');
         Route::post('/fund-transfer', 'AccountController@postFundTransfer');
         Route::get('/deposit/{id}', 'AccountController@getDeposit');

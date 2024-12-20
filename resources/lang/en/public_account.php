@@ -2,6 +2,7 @@
 return [
 'cost_centers' => 'Cost centers',
 "name_ar" => "Name Arabic",
+"budgetclassification" => "Budget Classification",
 "name_en" => "Name English",
 "type" => " Type",
 "status" => " Status",

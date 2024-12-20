@@ -433,6 +433,11 @@ class AdminSidebarMenu
                             __('public_account.list_income_classifications'),
                             ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'account' && request()->segment(2) == 'account']
                         );
+                        $sub->url(
+                            action('BudgetClassificationController@index'),
+                            __('public_account.budgetclassification'),
+                            ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'account' && request()->segment(2) == 'account']
+                        );
                      
                     },
                     ['icon' => 'fa fas fa-money-check-alt']
