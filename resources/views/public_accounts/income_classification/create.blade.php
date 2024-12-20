@@ -15,13 +15,36 @@
 
             <div class="form-group">
                 {!! Form::label('transaction_side', __('incomeclassifications.transaction_side') . ':*') !!}
-                {!! Form::select('transaction_side', ['credit' => __('incomeclassifications.credit'), 'detailed' => __('incomeclassifications.debit')], null, ['class' => 'form-control', 'required', 'placeholder' => __('messages.please_select')]); !!}
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div>
+                        {!! Form::radio('transaction_side', 'credit', false, ['id' => 'transaction_side_credit', 'required']) !!}
+                        {!! Form::label('transaction_side_credit', __('incomeclassifications.credit')) !!}
+                    </div>
+                    <div>
+                        {!! Form::radio('transaction_side', 'debit', false, ['id' => 'transaction_side_debit']) !!}
+                        {!! Form::label('transaction_side_debit', __('incomeclassifications.debit')) !!}
+                    </div>
+                </div>
             </div>
-
+            
             <div class="form-group">
                 {!! Form::label('type', __('incomeclassifications.type') . ':*') !!}
-                {!! Form::select('type', ['detailed' => __('incomeclassifications.detailed'), 'result ' => __('incomeclassifications.result '),'title' => __('incomeclassifications.title')], null, ['class' => 'form-control', 'required', 'placeholder' => __('messages.please_select')]); !!}
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div>
+                        {!! Form::radio('type', 'detailed', false, ['id' => 'type_detailed', 'required']) !!}
+                        {!! Form::label('type_detailed', __('incomeclassifications.detailed')) !!}
+                    </div>
+                    <div>
+                        {!! Form::radio('type', 'result', false, ['id' => 'type_result']) !!}
+                        {!! Form::label('type_result', __('incomeclassifications.result')) !!}
+                    </div>
+                    <div>
+                        {!! Form::radio('type', 'title', false, ['id' => 'type_title']) !!}
+                        {!! Form::label('type_title', __('incomeclassifications.title')) !!}
+                    </div>
+                </div>
             </div>
+            
 
            
         </div>
