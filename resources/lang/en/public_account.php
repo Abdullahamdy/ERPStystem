@@ -13,4 +13,5 @@ return [
 'detailed'=>'Detailed',
 'cost_centers'=>'Cost Centers',
 'cost_centers_manage'=>'Cost Centers Manage',
+"list_income_classifications" => "Income Classifications",
 ];

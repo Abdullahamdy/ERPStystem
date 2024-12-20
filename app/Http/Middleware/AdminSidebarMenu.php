@@ -428,6 +428,11 @@ class AdminSidebarMenu
                             __('public_account.cost_centers'),
                             ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'account' && request()->segment(2) == 'account']
                         );
+                        $sub->url(
+                            action('IncomeClassificationController@index'),
+                            __('public_account.list_income_classifications'),
+                            ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'account' && request()->segment(2) == 'account']
+                        );
                      
                     },
                     ['icon' => 'fa fas fa-money-check-alt']
