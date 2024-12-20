@@ -2,6 +2,7 @@
 return [
     "enable_editing_product_from_purchase" => "تمكين تعديل سعر المنتج من شاشة الشراء",
     "sales_commission_agent" => "البائع بالعموله",
+    "public_account" => "الحسابات العامة",
     "sales_commission_agents" =>  "البائع بالعموله",
     "disable" => "عطل",
     "logged_in_user" => "المستخدم المتصل",

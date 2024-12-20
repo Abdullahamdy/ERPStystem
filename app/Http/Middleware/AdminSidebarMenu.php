@@ -418,6 +418,22 @@ class AdminSidebarMenu
 
 
 
+              // public Accounts 
+              if (auth()->user()->can('account.access') && in_array('account', $enabled_modules)) {
+                $menu->dropdown(
+                    __('lang_v1.public_account'),
+                    function ($sub) {
+                        $sub->url(
+                            action('CostCentersController@index'),
+                            __('public_account.cost_centers'),
+                            ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'account' && request()->segment(2) == 'account']
+                        );
+                     
+                    },
+                    ['icon' => 'fa fas fa-money-check-alt']
+                )->order(7.8);
+            }
+
 
 
 

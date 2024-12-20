@@ -14,7 +14,9 @@ class AddBussinessIdInToProductGroups extends Migration
     public function up()
     {
         Schema::table('product_groups', function (Blueprint $table) {
-            $table->integer('business_id')->nullable();
+            if (!Schema::hasColumn('product_groups', 'business_id')) {
+                $table->integer('business_id')->nullable();
+            }
         });
     }
 
@@ -26,7 +28,7 @@ class AddBussinessIdInToProductGroups extends Migration
     public function down()
     {
         Schema::table('product_groups', function (Blueprint $table) {
-            //
+            $table->dropColumn('business_id')->nullable();
         });
     }
 }
